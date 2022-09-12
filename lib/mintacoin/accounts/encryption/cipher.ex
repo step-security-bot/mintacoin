@@ -25,7 +25,6 @@ defmodule Mintacoin.Accounts.Cipher do
 
     {:ok, ciphertext}
   rescue
-    :error -> {:error, :decoding_error}
     _error -> {:error, :encryption_error}
   end
 

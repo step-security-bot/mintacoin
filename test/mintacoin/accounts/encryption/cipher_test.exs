@@ -39,6 +39,10 @@ defmodule Mintacoin.Accounts.CipherTest do
       {:ok, "test"} = Cipher.decrypt(ciphertext, entropy)
     end
 
+    test "with invalid key size should return an error" do
+      {:error, :encryption_error} = Cipher.encrypt("test", "NBXWYYI=")
+    end
+
     test "with invalid key should return an error" do
       {:error, :decoding_error} = Cipher.decrypt("test", "invalid")
     end

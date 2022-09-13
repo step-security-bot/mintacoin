@@ -50,7 +50,8 @@ defmodule Mintacoin.MixProject do
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.2", only: [:dev, :test], runtime: false},
       {:bip39, "~> 0.1.1"},
-      {:ed25519, "~> 1.4"}
+      {:ed25519, "~> 1.4"},
+      {:ex_machina, "~> 2.7", only: :test}
     ]
   end
 

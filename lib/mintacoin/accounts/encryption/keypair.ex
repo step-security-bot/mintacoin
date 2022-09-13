@@ -45,7 +45,7 @@ defmodule Mintacoin.Accounts.Keypair do
     |> Base.encode32(padding: false)
     |> (&{:ok, &1}).()
   rescue
-    _error -> {:error, :mnemonic_seed_words_error}
+    _error -> {:error, :invalid_seed_words}
   end
 
   @spec build_seed_words :: {:ok, seed_words()}

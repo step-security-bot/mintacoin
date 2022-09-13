@@ -57,7 +57,7 @@ defmodule Mintacoin.Accounts.KeypairTest do
     end
 
     test "show error with invalid seed words" do
-      {:error, :mnemonic_seed_words_error} = Keypair.get_entropy_from_seed_words("INVALID ENTRY")
+      {:error, :invalid_seed_words} = Keypair.get_entropy_from_seed_words("INVALID ENTRY")
     end
   end
 

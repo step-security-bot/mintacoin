@@ -5,6 +5,7 @@ defmodule Mintacoin.Factory do
   use ExMachina.Ecto, repo: Mintacoin.Repo
 
   use Mintacoin.{
-    AccountFactory
+    AccountFactory,
+    BlockchainFactory
   }
 end

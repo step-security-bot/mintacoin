@@ -51,7 +51,8 @@ defmodule Mintacoin.MixProject do
       {:dialyxir, "~> 1.2", only: [:dev, :test], runtime: false},
       {:bip39, "~> 0.1.1"},
       {:ed25519, "~> 1.4"},
-      {:ex_machina, "~> 2.7", only: :test}
+      {:ex_machina, "~> 2.7", only: :test},
+      {:ecto_enum, "~> 1.4"}
     ]
   end
 

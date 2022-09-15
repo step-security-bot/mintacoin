@@ -8,6 +8,7 @@ defmodule Mintacoin.Account do
   import Ecto.Changeset
 
   alias Ecto.Changeset
+  alias Mintacoin.Wallet
 
   @type t :: %__MODULE__{
           address: String.t(),
@@ -21,6 +22,8 @@ defmodule Mintacoin.Account do
 
     field(:signature, :string, virtual: true)
     field(:seed_words, :string, virtual: true)
+
+    has_many(:wallets, Wallet)
 
     timestamps()
   end

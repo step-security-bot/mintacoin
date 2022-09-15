@@ -9,6 +9,7 @@ defmodule Mintacoin.Blockchain do
   import EctoEnum
 
   alias Ecto.Changeset
+  alias Mintacoin.Wallet
 
   @type name :: Name
   @type network :: Network
@@ -27,6 +28,8 @@ defmodule Mintacoin.Blockchain do
   schema "blockchains" do
     field(:name, Name)
     field(:network, Network)
+
+    has_many(:wallets, Wallet)
 
     timestamps()
   end

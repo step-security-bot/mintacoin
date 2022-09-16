@@ -12,7 +12,7 @@ defmodule Mintacoin.Wallets do
   @type parameter :: keyword()
 
   @spec create(changes :: changes()) :: {:ok, Wallet.t()} | {:error, error()}
-  def create(changes) when is_map(changes) do
+  def create(%{} = changes) do
     %Wallet{}
     |> Wallet.changeset(changes)
     |> Repo.insert()

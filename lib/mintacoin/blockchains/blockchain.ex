@@ -9,15 +9,11 @@ defmodule Mintacoin.Blockchain do
   import EctoEnum
 
   alias Ecto.Changeset
-  alias Mintacoin.Wallet
+  alias Mintacoin.{BlockchainTx, Wallet}
 
-  @type name :: Name
+  @type name :: String.t()
   @type network :: Network
   @type t :: %__MODULE__{name: name(), network: network()}
-
-  defenum(Name, :name, [
-    :stellar
-  ])
 
   defenum(Network, :network, [
     :mainnet,
@@ -26,10 +22,11 @@ defmodule Mintacoin.Blockchain do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "blockchains" do
-    field(:name, Name)
+    field(:name, :string)
     field(:network, Network)
 
     has_many(:wallets, Wallet)
+    has_many(:blockchain_txs, BlockchainTx)
 
     timestamps()
   end

@@ -10,7 +10,16 @@ defmodule Mintacoin.BlockchainFactory do
     quote do
       @spec blockchain_factory(attrs :: map()) :: Blockchain.t()
       def blockchain_factory(attrs) do
-        blockchain_name = Map.get(attrs, :name, :stellar)
+        blockchain_name =
+          Map.get(
+            attrs,
+            :name,
+            sequence(
+              :name,
+              &"blockchain_name#{&1}"
+            )
+          )
+
         blockchain_network = Map.get(attrs, :network, :testnet)
 
         %Blockchain{id: UUID.generate(), name: blockchain_name, network: blockchain_network}

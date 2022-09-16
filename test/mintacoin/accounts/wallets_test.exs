@@ -19,7 +19,7 @@ defmodule Mintacoin.Accounts.WalletsTest do
         "oCZIdnWX8ZF6cHJ5CJbdmc5wmDzoLoXi+SnwQYzHv3GtmDwqc/ATx4MktFMo3lzGLaCwanD084dHyvGaQQlNOkcqss3Hgr8gxsb64xk+Gyc",
       secret_key: "MKMO5J4VQDIPTQ52FUC2DZN4DTFM4L3TCLQFND64CSTKJADR4GGQ",
       invalid_uuid: "INVALID-UUID",
-      valid_uuid: "d9cb83d6-05f5-4557-b5d0-9e1728c42091"
+      not_existing_uuid: "d9cb83d6-05f5-4557-b5d0-9e1728c42091"
     }
   end
 
@@ -118,7 +118,7 @@ defmodule Mintacoin.Accounts.WalletsTest do
       encrypted_secret_key: encrypted_secret_key,
       secret_key: secret_key,
       blockchain_id: blockchain_id,
-      valid_uuid: valid_uuid
+      not_existing_uuid: not_existing_uuid
     } do
       {:error,
        %Changeset{
@@ -131,7 +131,7 @@ defmodule Mintacoin.Accounts.WalletsTest do
           public_key: public_key,
           encrypted_secret_key: encrypted_secret_key,
           secret_key: secret_key,
-          account_id: valid_uuid,
+          account_id: not_existing_uuid,
           blockchain_id: blockchain_id
         })
     end
@@ -141,7 +141,7 @@ defmodule Mintacoin.Accounts.WalletsTest do
       encrypted_secret_key: encrypted_secret_key,
       secret_key: secret_key,
       account_id: account_id,
-      valid_uuid: valid_uuid
+      not_existing_uuid: not_existing_uuid
     } do
       {:error,
        %Changeset{
@@ -155,7 +155,7 @@ defmodule Mintacoin.Accounts.WalletsTest do
           encrypted_secret_key: encrypted_secret_key,
           secret_key: secret_key,
           account_id: account_id,
-          blockchain_id: valid_uuid
+          blockchain_id: not_existing_uuid
         })
     end
 
@@ -251,8 +251,8 @@ defmodule Mintacoin.Accounts.WalletsTest do
       {:ok, %Wallet{id: ^wallet_id}} = Wallets.retrieve_by_id(wallet_id)
     end
 
-    test "when wallet doesn't exist and is valid value", %{valid_uuid: valid_uuid} do
-      {:ok, nil} = Wallets.retrieve_by_id(valid_uuid)
+    test "when wallet doesn't exist and is valid value", %{not_existing_uuid: not_existing_uuid} do
+      {:ok, nil} = Wallets.retrieve_by_id(not_existing_uuid)
     end
 
     test "when id is invalid value" do
@@ -271,8 +271,8 @@ defmodule Mintacoin.Accounts.WalletsTest do
       {:ok, %Wallet{public_key: ^public_key}} = Wallets.retrieve_by_public_key(public_key)
     end
 
-    test "when wallet doesn't exist and key is valid", %{valid_uuid: valid_uuid} do
-      {:ok, nil} = Wallets.retrieve_by_public_key(valid_uuid)
+    test "when wallet doesn't exist and key is valid", %{not_existing_uuid: not_existing_uuid} do
+      {:ok, nil} = Wallets.retrieve_by_public_key(not_existing_uuid)
     end
 
     test "when key is invalid value" do

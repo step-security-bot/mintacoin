@@ -10,7 +10,11 @@ defmodule Mintacoin.WalletFactory do
     quote do
       @spec wallet_factory(attrs :: map()) :: Wallet.t()
       def wallet_factory(attrs) do
-        default_public_key = "UE5FYDVAPAEGYYMPJOY4Q54WB53YNX7XU6HIUDWTDYGO3WVDVY4Q"
+        default_public_key =
+          sequence(
+            :tx_hash,
+            &"UE5FYDVAPAEGYYMPJOY4Q54WB53YNX7XU6HIUDWTDYGO3WVDVY4Q#{&1}"
+          )
 
         default_encrypted_sk =
           "kLex5P1DpGrseFVQ2UR0lCS5To2AwM3slWQWjtU/R51o545Re2FZgV6lQJtBk+5/ScZDuAkMFYk2mtfP9VTjd4ThwvBxqyH5skG3jsw5Acw"

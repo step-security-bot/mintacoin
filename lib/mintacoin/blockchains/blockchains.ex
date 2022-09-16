@@ -12,7 +12,7 @@ defmodule Mintacoin.Blockchains do
   @type error :: Changeset.t() | :invalid_params
 
   @spec create(changes :: changes()) :: {:ok, Blockchain.t()} | {:error, error()}
-  def create(changes) when is_map(changes) do
+  def create(%{} = changes) do
     %Blockchain{}
     |> Blockchain.changeset(changes)
     |> Repo.insert()

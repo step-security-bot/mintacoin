@@ -14,7 +14,7 @@ defmodule Mintacoin.Blockchains.BlockchainsTest do
     :ok = Sandbox.checkout(Mintacoin.Repo)
 
     %{
-      name: :stellar,
+      name: "stellar",
       network: :testnet
     }
   end
@@ -55,6 +55,10 @@ defmodule Mintacoin.Blockchains.BlockchainsTest do
            | _tail
          ]
        }} = Blockchains.create(%{name: name, network: network})
+    end
+
+    test "with invalid params" do
+      {:error, :invalid_params} = Blockchains.create(123)
     end
   end
 

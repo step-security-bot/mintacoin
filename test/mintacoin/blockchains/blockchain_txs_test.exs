@@ -78,8 +78,7 @@ defmodule Mintacoin.Blockchains.BlockchainTxsTest do
       {:error,
        %Changeset{
          errors: [
-           blockchain_id: {"can't be blank", _},
-           wallet_id: {"can't be blank", _}
+           blockchain_id: {"can't be blank", _}
          ]
        }} = BlockchainTxs.create(%{})
     end
@@ -97,6 +96,25 @@ defmodule Mintacoin.Blockchains.BlockchainTxsTest do
        }} =
         BlockchainTxs.create(%{
           wallet_id: invalid_uuid,
+          blockchain_id: blockchain_id
+        })
+    end
+
+    test "when account_id is not a valid uuid", %{
+      invalid_uuid: invalid_uuid,
+      wallet: %{id: wallet_id},
+      blockchain: %{id: blockchain_id}
+    } do
+      {:error,
+       %Changeset{
+         errors: [
+           {:account_id, {"account_id must be a uuid", _detail}}
+           | _tail
+         ]
+       }} =
+        BlockchainTxs.create(%{
+          account_id: invalid_uuid,
+          wallet_id: wallet_id,
           blockchain_id: blockchain_id
         })
     end

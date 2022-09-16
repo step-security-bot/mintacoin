@@ -3,14 +3,34 @@ defmodule Mintacoin.Accounts do
   This module is the responsible for the CRUD operations for accounts and also for the aggreate operations within the accounts context.
   """
 
-  alias Ecto.Changeset
-  alias Mintacoin.{Account, Accounts.Cipher, Accounts.Keypair, Repo}
+  alias Ecto.{Changeset, Multi}
+
+  alias Mintacoin.{
+    Account,
+    Accounts.Cipher,
+    Accounts.Keypair,
+    Blockchain,
+    Blockchains,
+    BlockchainTx,
+    BlockchainTxs,
+    Repo
+  }
 
   @type address :: String.t()
   @type seed_words :: String.t()
   @type signature :: String.t() | nil
   @type account :: Account.t() | nil
+  @type params :: map()
   @type error :: Changeset.t() | :decoding_error | :invalid_address | :invalid_seed_words
+
+  @spec create_account(params :: map()) :: {:ok, Account.t()} | {:error, error()}
+  def create_account(params),
+    do:
+      Multi.new()
+      |> Multi.run(:account, fn _repo, _ -> create() end)
+      |> Multi.run(:blockchain_tx, create_blockchain_tx(params))
+      |> Repo.transaction()
+      |> handle_multi_response()
 
   @spec create :: {:ok, Account.t()} | {:error, error()}
   def create do
@@ -35,4 +55,25 @@ defmodule Mintacoin.Accounts do
       error -> error
     end
   end
+
+  @spec create_blockchain_tx(params :: params()) ::
+          (any(), map() -> {:ok, BlockchainTx.t()} | {:error, error()})
+  defp create_blockchain_tx(%{blockchain: blockchain, network: network}) do
+    fn _repo, %{account: %Account{id: account_id}} ->
+      case Blockchains.retrieve(blockchain, network) do
+        {:ok, %Blockchain{id: blockchain_id}} ->
+          BlockchainTxs.create(%{
+            account_id: account_id,
+            blockchain_id: blockchain_id
+          })
+
+        {:ok, nil} ->
+          {:error, :invalid_blockchain}
+      end
+    end
+  end
+
+  @spec handle_multi_response(response :: tuple()) :: {:ok, Account.t()} | {:error, error()}
+  defp handle_multi_response({:ok, %{account: account}}), do: {:ok, account}
+  defp handle_multi_response({:error, _step, error, _result}), do: {:error, error}
 end

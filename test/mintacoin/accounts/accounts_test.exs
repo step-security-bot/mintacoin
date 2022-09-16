@@ -8,7 +8,7 @@ defmodule Mintacoin.Accounts.AccountsTest do
   import Mintacoin.Factory, only: [insert: 1]
 
   alias Ecto.Adapters.SQL.Sandbox
-  alias Mintacoin.{Account, Accounts}
+  alias Mintacoin.{Account, Accounts, BlockchainTx, BlockchainTxs}
 
   setup do
     :ok = Sandbox.checkout(Mintacoin.Repo)
@@ -18,7 +18,24 @@ defmodule Mintacoin.Accounts.AccountsTest do
     }
   end
 
-  test "create/1" do
+  describe "create_account/1" do
+    test "with valid params" do
+      %{name: blockchain, network: network} = insert(:blockchain)
+
+      {:ok, %Account{id: account_id}} =
+        Accounts.create_account(%{blockchain: blockchain, network: network})
+
+      {:ok, [%BlockchainTx{account_id: ^account_id}]} =
+        BlockchainTxs.retrieve_by_account_id(account_id)
+    end
+
+    test "with invalid blockchain" do
+      {:error, :invalid_blockchain} =
+        Accounts.create_account(%{blockchain: "invalid_blockchain", network: "mainnet"})
+    end
+  end
+
+  test "create/0" do
     {:ok, %Account{}} = Accounts.create()
   end
 

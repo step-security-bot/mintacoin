@@ -3,7 +3,7 @@ defmodule Mintacoin.Accounts do
   This module is the responsible for the CRUD operations for accounts and also for the aggreate operations within the accounts context.
   """
 
-  alias Ecto.{Changeset, Multi}
+  alias Ecto.{Changeset, Multi, UUID}
 
   alias Mintacoin.{
     Account,
@@ -16,6 +16,7 @@ defmodule Mintacoin.Accounts do
     Repo
   }
 
+  @type id :: UUID.t()
   @type address :: String.t()
   @type seed_words :: String.t()
   @type signature :: String.t() | nil
@@ -41,13 +42,17 @@ defmodule Mintacoin.Accounts do
     |> Repo.insert()
   end
 
-  @spec retrieve(address :: address()) :: {:ok, account()}
-  def retrieve(address), do: {:ok, Repo.get_by(Account, address: address)}
+  @spec retrieve_by_address(address :: address()) :: {:ok, account()}
+  def retrieve_by_address(address), do: {:ok, Repo.get_by(Account, address: address)}
+
+  @spec retrieve_by_id(id :: id()) :: {:ok, account()}
+  def retrieve_by_id(id), do: {:ok, Repo.get(Account, id)}
 
   @spec recover_signature(address :: address(), seed_words :: seed_words()) ::
           {:ok, signature()} | {:error, error()}
   def recover_signature(address, seed_words) do
-    with {:ok, %Account{encrypted_signature: encrypted_signature}} <- retrieve(address),
+    with {:ok, %Account{encrypted_signature: encrypted_signature}} <-
+           retrieve_by_address(address),
          {:ok, entropy} <- Keypair.get_entropy_from_seed_words(seed_words) do
       Cipher.decrypt(encrypted_signature, entropy)
     else

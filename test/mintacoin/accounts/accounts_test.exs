@@ -14,6 +14,7 @@ defmodule Mintacoin.Accounts.AccountsTest do
     :ok = Sandbox.checkout(Mintacoin.Repo)
 
     %{
+      no_existing_uuid: "d9cb83d6-05f5-4557-b5d0-9e1728c42091",
       invalid_address: "INVALID_ADDRESS"
     }
   end
@@ -39,14 +40,25 @@ defmodule Mintacoin.Accounts.AccountsTest do
     {:ok, %Account{}} = Accounts.create()
   end
 
-  describe "retrieve/1" do
+  describe "retrieve_by_address/1" do
     test "with valid address" do
       %Account{address: address} = insert(:account)
-      {:ok, %Account{address: ^address}} = Accounts.retrieve(address)
+      {:ok, %Account{address: ^address}} = Accounts.retrieve_by_address(address)
     end
 
     test "with non existing address", %{invalid_address: invalid_address} do
-      {:ok, nil} = Accounts.retrieve(invalid_address)
+      {:ok, nil} = Accounts.retrieve_by_address(invalid_address)
+    end
+  end
+
+  describe "retrieve_by_id/1" do
+    test "with valid id" do
+      %Account{id: id} = insert(:account)
+      {:ok, %Account{id: ^id}} = Accounts.retrieve_by_id(id)
+    end
+
+    test "with non existing id", %{no_existing_uuid: no_existing_uuid} do
+      {:ok, nil} = Accounts.retrieve_by_id(no_existing_uuid)
     end
   end
 

@@ -18,43 +18,8 @@ defmodule Mintacoin.Accounts.AccountsTest do
     }
   end
 
-  describe "create/1" do
-    setup do
-      {:ok,
-       %Account{
-         id: id,
-         address: address,
-         encrypted_signature: encrypted_signature,
-         signature: signature,
-         seed_words: seed_words
-       }} = Accounts.create()
-
-      %{
-        id: id,
-        address: address,
-        encrypted_signature: encrypted_signature,
-        signature: signature,
-        seed_words: seed_words
-      }
-    end
-
-    test "with valid params", %{
-      id: id,
-      address: address,
-      encrypted_signature: encrypted_signature,
-      signature: signature,
-      seed_words: seed_words
-    } do
-      assert is_binary(id)
-      assert is_binary(address)
-      assert is_binary(encrypted_signature)
-      assert is_binary(signature)
-      assert is_binary(seed_words)
-    end
-
-    test "is present in database", %{id: id} do
-      %Account{id: ^id} = Repo.get(Account, id)
-    end
+  test "create/1" do
+    {:ok, %Account{}} = Accounts.create()
   end
 
   describe "retrieve/1" do
@@ -65,10 +30,6 @@ defmodule Mintacoin.Accounts.AccountsTest do
 
     test "with non existing address", %{invalid_address: invalid_address} do
       {:ok, nil} = Accounts.retrieve(invalid_address)
-    end
-
-    test "with no binary address" do
-      {:error, :invalid_address} = Accounts.retrieve(123)
     end
   end
 

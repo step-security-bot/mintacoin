@@ -158,16 +158,6 @@ defmodule Mintacoin.Accounts.WalletsTest do
           blockchain_id: not_existing_uuid
         })
     end
-
-    test "with invalid params" do
-      {:error, :invalid_params} =
-        Wallets.create(
-          public_key: :public_key,
-          encrypted_secret_key: :encrypted_secret_key,
-          account_id: :account_id,
-          blockchain_id: :blockchain_id
-        )
-    end
   end
 
   describe "create/1 when wallet already exist" do
@@ -254,14 +244,6 @@ defmodule Mintacoin.Accounts.WalletsTest do
     test "when wallet doesn't exist and is valid value", %{not_existing_uuid: not_existing_uuid} do
       {:ok, nil} = Wallets.retrieve_by_id(not_existing_uuid)
     end
-
-    test "when id is invalid value" do
-      {:error, :invalid_params} = Wallets.retrieve_by_id(123)
-    end
-
-    test "when id uuid is invalid", %{invalid_uuid: invalid_uuid} do
-      {:ok, nil} = Wallets.retrieve_by_id(invalid_uuid)
-    end
   end
 
   describe "retrieve_by_public_key/1" do
@@ -273,10 +255,6 @@ defmodule Mintacoin.Accounts.WalletsTest do
 
     test "when wallet doesn't exist and key is valid", %{not_existing_uuid: not_existing_uuid} do
       {:ok, nil} = Wallets.retrieve_by_public_key(not_existing_uuid)
-    end
-
-    test "when key is invalid value" do
-      {:error, :invalid_params} = Wallets.retrieve_by_public_key(123)
     end
   end
 

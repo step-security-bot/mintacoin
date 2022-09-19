@@ -56,10 +56,6 @@ defmodule Mintacoin.Blockchains.BlockchainsTest do
          ]
        }} = Blockchains.create(%{name: name, network: network})
     end
-
-    test "with invalid params" do
-      {:error, :invalid_params} = Blockchains.create(123)
-    end
   end
 
   describe "retrieve/2" do
@@ -74,11 +70,7 @@ defmodule Mintacoin.Blockchains.BlockchainsTest do
     end
 
     test "with invalid name", %{network: network} do
-      {:ok, nil} = Blockchains.retrieve(:testchain, network)
-    end
-
-    test "with invalid network", %{name: name} do
-      {:ok, nil} = Blockchains.retrieve(name, :testchain)
+      {:ok, nil} = Blockchains.retrieve("testchain", network)
     end
   end
 

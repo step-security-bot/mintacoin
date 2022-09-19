@@ -74,10 +74,6 @@ defmodule Mintacoin.Blockchains.BlockchainTxsTest do
         })
     end
 
-    test "with invalid params" do
-      {:error, :invalid_params} = BlockchainTxs.create(123)
-    end
-
     test "with missing param" do
       {:error,
        %Changeset{
@@ -182,28 +178,6 @@ defmodule Mintacoin.Blockchains.BlockchainTxsTest do
           tx_response: tx_response
         })
     end
-
-    test "when blockchainTx doesn't exists", %{
-      not_existing_uuid: not_existing_uuid,
-      tx_id: tx_id,
-      tx_hash: tx_hash,
-      successful: successful,
-      tx_timestamp: tx_timestamp,
-      tx_response: tx_response
-    } do
-      {:error, :not_found} =
-        BlockchainTxs.update(not_existing_uuid, %{
-          tx_id: tx_id,
-          tx_hash: tx_hash,
-          successful: successful,
-          tx_timestamp: tx_timestamp,
-          tx_response: tx_response
-        })
-    end
-
-    test "with invalid params" do
-      {:error, :invalid_params} = BlockchainTxs.update(123, 321)
-    end
   end
 
   describe "retrieve_by_id/1" do
@@ -214,14 +188,6 @@ defmodule Mintacoin.Blockchains.BlockchainTxsTest do
     test "when a blockchain tx doesn't exist", %{not_existing_uuid: not_existing_uuid} do
       {:ok, nil} = BlockchainTxs.retrieve_by_id(not_existing_uuid)
     end
-
-    test "with invalid uuid", %{invalid_uuid: invalid_uuid} do
-      {:ok, nil} = BlockchainTxs.retrieve_by_id(invalid_uuid)
-    end
-
-    test "with invalid param" do
-      {:error, :invalid_params} = BlockchainTxs.retrieve_by_id(123)
-    end
   end
 
   describe "retrieve_by_tx_id/1" do
@@ -231,10 +197,6 @@ defmodule Mintacoin.Blockchains.BlockchainTxsTest do
 
     test "with invalid tx_id" do
       {:ok, nil} = BlockchainTxs.retrieve_by_tx_id("invalid_tx_id")
-    end
-
-    test "with invalid param" do
-      {:error, :invalid_params} = BlockchainTxs.retrieve_by_tx_id(123)
     end
   end
 
@@ -247,14 +209,6 @@ defmodule Mintacoin.Blockchains.BlockchainTxsTest do
 
     test "when wallet doesn't exist", %{not_existing_uuid: not_existing_uuid} do
       {:ok, []} = BlockchainTxs.retrieve_by_wallet_id(not_existing_uuid)
-    end
-
-    test "with invalid wallet id", %{invalid_uuid: invalid_uuid} do
-      {:ok, []} = BlockchainTxs.retrieve_by_wallet_id(invalid_uuid)
-    end
-
-    test "with invalid param" do
-      {:error, :invalid_params} = BlockchainTxs.retrieve_by_wallet_id(123)
     end
   end
 end

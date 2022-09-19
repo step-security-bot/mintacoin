@@ -38,4 +38,7 @@ defmodule Mintacoin.Blockchain do
     |> validate_required([:name, :network])
     |> unique_constraint([:name, :network])
   end
+
+  @spec default :: :stellar
+  def default, do: :stellar
 end

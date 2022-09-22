@@ -35,6 +35,12 @@ defmodule Mintacoin.BlockchainTxs do
   @spec retrieve_by_tx_id(tx_id :: tx_id()) :: {:ok, blockchain_tx()}
   def retrieve_by_tx_id(tx_id), do: {:ok, Repo.get_by(BlockchainTx, tx_id: tx_id)}
 
+  @spec retrieve_by_account_id(account_id :: id()) :: {:ok, list(blockchain_tx())}
+  def retrieve_by_account_id(account_id) do
+    query = from(btx in BlockchainTx, where: btx.account_id == ^account_id)
+    {:ok, Repo.all(query)}
+  end
+
   @spec retrieve_by_wallet_id(wallet_id :: wallet_id()) :: {:ok, list(blockchain_tx())}
   def retrieve_by_wallet_id(wallet_id) do
     query = from(btx in BlockchainTx, where: btx.wallet_id == ^wallet_id)

@@ -14,6 +14,9 @@ config :mintacoin, MintacoinWeb.Endpoint, cache_static_manifest: "priv/static/ca
 # Do not print debug messages in production
 config :logger, level: :info
 
+# Encryption variables for accounts signatures
+config :mintacoin, encryption_variable: System.get_env("ENCRYPTION_VARIABLE")
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

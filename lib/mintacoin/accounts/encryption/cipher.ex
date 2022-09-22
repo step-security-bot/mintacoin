@@ -46,6 +46,22 @@ defmodule Mintacoin.Accounts.Cipher do
     end
   end
 
+  @spec encrypt_with_system_key(payload :: payload()) :: {:ok, ciphertext()} | {:error, error()}
+  def encrypt_with_system_key(payload) do
+    encrypt(payload, system_encryption_secret())
+  end
+
+  @spec decrypt_with_system_key(ciphertext :: ciphertext()) ::
+          {:ok, payload()} | {:error, error()}
+  def decrypt_with_system_key(ciphertext) do
+    decrypt(ciphertext, system_encryption_secret())
+  end
+
+  @spec system_encryption_secret() :: key()
+  defp system_encryption_secret do
+    Application.get_env(:mintacoin, :encryption_variable, nil)
+  end
+
   @spec unpad(data :: String.t()) :: String.t()
   defp unpad(data) do
     to_remove = :binary.last(data)

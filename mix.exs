@@ -52,7 +52,8 @@ defmodule Mintacoin.MixProject do
       {:bip39, "~> 0.1.1"},
       {:ed25519, "~> 1.4"},
       {:ex_machina, "~> 2.7", only: :test},
-      {:ecto_enum, "~> 1.4"}
+      {:ecto_enum, "~> 1.4"},
+      {:oban, "~> 2.13"}
     ]
   end
 

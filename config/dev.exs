@@ -26,6 +26,9 @@ config :mintacoin, MintacoinWeb.Endpoint,
   secret_key_base: "Z0kkQIOGuQJtp+msG4cFEaeB4fB+Kgk6sxHLJzza5/Er5ypKlel65DgGzTdNCHIj",
   watchers: []
 
+# Encryption variables for accounts signatures
+config :mintacoin, encryption_variable: "HQHSCWQ4HNBMLFUWHU2S7H3KGU"
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

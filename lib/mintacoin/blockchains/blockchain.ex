@@ -39,6 +39,6 @@ defmodule Mintacoin.Blockchain do
     |> unique_constraint([:name, :network])
   end
 
-  @spec default :: :stellar
-  def default, do: :stellar
+  @spec default :: String.t()
+  def default, do: "stellar"
 end

@@ -10,6 +10,7 @@ defmodule Mintacoin.BlockchainTxFactory do
     quote do
       @spec blockchain_tx_factory(attrs :: map()) :: BlockchainTx.t()
       def blockchain_tx_factory(attrs) do
+        account = Map.get(attrs, :account, insert(:account))
         blockchain = Map.get(attrs, :blockchain, insert(:blockchain))
         wallet = Map.get(attrs, :wallet, insert(:wallet, blockchain: blockchain))
         successful = Map.get(attrs, :successful, false)
@@ -38,6 +39,7 @@ defmodule Mintacoin.BlockchainTxFactory do
 
         %BlockchainTx{
           id: UUID.generate(),
+          account: account,
           blockchain: blockchain,
           wallet: wallet,
           successful: successful,

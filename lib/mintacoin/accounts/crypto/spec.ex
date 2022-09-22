@@ -3,10 +3,10 @@ defmodule Mintacoin.Accounts.Crypto.Spec do
   Defines contracts for the transactions available for accounts crypto
   """
 
-  @type status :: :ok | :error
-  @type params :: map()
-  @type response :: map()
-  @type opts :: Keyword.t()
+  alias Mintacoin.Accounts.Crypto.AccountResponse
 
-  @callback create_account(params(), opts()) :: {status(), response()}
+  @type opts :: Keyword.t()
+  @type response :: {:ok, AccountResponse.t()} | {:error, map()}
+
+  @callback create_account(opts()) :: response()
 end

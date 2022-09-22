@@ -8,15 +8,15 @@ defmodule Mintacoin.Accounts.Crypto do
   alias Mintacoin.{Accounts.Stellar, Blockchain}
 
   @type status :: :ok | :error
-  @type blockchain :: :stellar
+  @type blockchain :: String.t()
   @type impl :: Stellar
 
   @impl true
-  def create_account(params, opts \\ []) do
+  def create_account(opts \\ []) do
     blockchain = Keyword.get(opts, :blockchain, Blockchain.default())
-    impl(blockchain).create_account(params, opts)
+    impl(blockchain).create_account(opts)
   end
 
   @spec impl(blockchain :: blockchain()) :: impl()
-  defp impl(:stellar), do: Stellar
+  defp impl("stellar"), do: Application.get_env(:mintacoin, :stellar_impl, Stellar)
 end

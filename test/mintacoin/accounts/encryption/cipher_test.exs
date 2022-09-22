@@ -47,4 +47,9 @@ defmodule Mintacoin.Accounts.CipherTest do
       {:error, :decoding_error} = Cipher.decrypt("test", "invalid")
     end
   end
+
+  test "encrypt and decrypt with system key" do
+    {:ok, ciphertext} = Cipher.encrypt_with_system_key("test")
+    {:ok, "test"} = Cipher.decrypt_with_system_key(ciphertext)
+  end
 end

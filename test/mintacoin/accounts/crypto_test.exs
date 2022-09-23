@@ -6,7 +6,7 @@ defmodule Mintacoin.Accounts.CryptoTest do
 
   alias Mintacoin.Accounts.{Crypto, Crypto.AccountResponse}
 
-  describe "create_account/2" do
+  describe "create_account/1" do
     test "with the stellar blockchain" do
       {:ok,
        %AccountResponse{

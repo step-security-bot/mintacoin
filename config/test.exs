@@ -30,7 +30,10 @@ config :phoenix, :plug_init_mode, :runtime
 config :mintacoin, Oban, testing: :inline
 
 # Crypto implementations envs
-config :mintacoin, stellar_impl: Mintacoin.Accounts.Stellar
+config :mintacoin, stellar_impl: Mintacoin.Accounts.StellarMock
 
 # Encryption variables for accounts signatures
 config :mintacoin, encryption_variable: "HQHSCWQ4HNBMLFUWHU2S7H3KGU"
+
+# Stellar SDK configuration
+config :stellar_sdk, network: :test

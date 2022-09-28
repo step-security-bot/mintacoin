@@ -12,7 +12,12 @@ defmodule Mintacoin.Accounts do
   @type seed_words :: String.t()
   @type signature :: String.t() | nil
   @type account :: Account.t() | nil
-  @type error :: Changeset.t() | :decoding_error | :invalid_address | :invalid_seed_words
+  @type error ::
+          Changeset.t()
+          | :decoding_error
+          | :invalid_address
+          | :invalid_seed_words
+          | :encryption_error
 
   @spec create(Mintacoin.Blockchain.t()) :: {:ok, Account.t()} | {:error, error()}
   def create(%Blockchain{id: blockchain_id}) do

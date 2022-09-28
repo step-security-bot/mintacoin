@@ -20,6 +20,9 @@ config :mintacoin, stellar_fund_secret_key: System.get_env("STELLAR_FUND_SECRET_
 # Encryption variables for accounts signatures
 config :mintacoin, encryption_variable: System.get_env("ENCRYPTION_VARIABLE")
 
+# Configure blockchains network :testnet | :mainnet
+config :mintacoin, blockchains_network: System.get_env("BLOCKCHAINS_NETWORK")
+
 # Stellar SDK configuration
 config :stellar_sdk, network: System.get_env("STELLAR_NETWORK")
 

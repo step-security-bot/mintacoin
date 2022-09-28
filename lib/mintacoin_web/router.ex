@@ -3,10 +3,14 @@ defmodule MintacoinWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug MintacoinWeb.Plugs.SetBlockchainNetwork
   end
 
   scope "/api", MintacoinWeb do
     pipe_through :api
+
+    resources "/accounts", AccountsController, param: "address", except: [:index, :show]
+    post "/accounts/:address/recover", AccountsController, :recover
   end
 
   # Enables LiveDashboard only for development

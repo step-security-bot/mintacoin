@@ -4,10 +4,10 @@ defmodule Mintacoin.MixProject do
   def project do
     [
       app: :mintacoin,
-      version: "0.1.0",
+      version: "0.2.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:gettext] ++ Mix.compilers(),
+      compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -48,7 +48,13 @@ defmodule Mintacoin.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.2", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.2", only: [:dev, :test], runtime: false},
+      {:bip39, "~> 0.1.1"},
+      {:ed25519, "~> 1.4"},
+      {:ex_machina, "~> 2.7", only: :test},
+      {:ecto_enum, "~> 1.4"},
+      {:oban, "~> 2.13"},
+      {:stellar_sdk, "~> 0.10.0"}
     ]
   end
 

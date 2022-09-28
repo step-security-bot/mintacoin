@@ -15,7 +15,9 @@ defmodule Mintacoin.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Mintacoin.PubSub},
       # Start the Endpoint (http/https)
-      MintacoinWeb.Endpoint
+      MintacoinWeb.Endpoint,
+      # Oban
+      {Oban, oban_config()}
       # Start a worker by calling: Mintacoin.Worker.start_link(arg)
       # {Mintacoin.Worker, arg}
     ]
@@ -33,4 +35,6 @@ defmodule Mintacoin.Application do
     MintacoinWeb.Endpoint.config_change(changed, removed)
     :ok
   end
+
+  defp oban_config, do: Application.get_env(:mintacoin, Oban)
 end

@@ -25,3 +25,5 @@ mintacoin-*.tar
 # Ignore the cache ptl from the priv folder
 /priv/plts/
 
+# Ignore dev configuration
+config/dev.exs

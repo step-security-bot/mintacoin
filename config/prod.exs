@@ -14,6 +14,18 @@ config :mintacoin, MintacoinWeb.Endpoint, cache_static_manifest: "priv/static/ca
 # Do not print debug messages in production
 config :logger, level: :info
 
+# Fund account secret key
+config :mintacoin, stellar_fund_secret_key: System.get_env("STELLAR_FUND_SECRET_KEY")
+
+# Encryption variables for accounts signatures
+config :mintacoin, encryption_variable: System.get_env("ENCRYPTION_VARIABLE")
+
+# Configure blockchains network :testnet | :mainnet
+config :mintacoin, blockchains_network: System.get_env("BLOCKCHAINS_NETWORK")
+
+# Stellar SDK configuration
+config :stellar_sdk, network: System.get_env("STELLAR_NETWORK")
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

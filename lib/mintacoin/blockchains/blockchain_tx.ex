@@ -8,13 +8,14 @@ defmodule Mintacoin.BlockchainTx do
   import Ecto.Changeset
 
   alias Ecto.Changeset
-  alias Mintacoin.{Account, Asset, Blockchain, Wallet}
+  alias Mintacoin.{Account, Asset, AssetHolder, Blockchain, Wallet}
 
   @type t :: %__MODULE__{
           blockchain_id: Blockchain.t(),
           account_id: Account.t(),
           wallet_id: Wallet.t(),
           asset_id: Asset.t(),
+          asset_holder_id: AssetHolder.t(),
           successful: boolean(),
           tx_id: String.t(),
           tx_hash: String.t(),
@@ -30,6 +31,7 @@ defmodule Mintacoin.BlockchainTx do
     belongs_to(:account, Account, type: :binary_id)
     belongs_to(:wallet, Wallet, type: :binary_id)
     belongs_to(:asset, Asset, type: :binary_id)
+    belongs_to(:asset_holder, AssetHolder, type: :binary_id)
 
     field(:successful, :boolean, default: false)
     field(:tx_id, :string)
@@ -59,6 +61,7 @@ defmodule Mintacoin.BlockchainTx do
       :account_id,
       :wallet_id,
       :asset_id,
+      :asset_holder_id,
       :successful,
       :tx_id,
       :tx_hash,
@@ -70,9 +73,11 @@ defmodule Mintacoin.BlockchainTx do
     |> validate_format(:wallet_id, @uuid_regex, message: "wallet_id must be a uuid")
     |> validate_format(:account_id, @uuid_regex, message: "account_id must be a uuid")
     |> validate_format(:asset_id, @uuid_regex, message: "asset_id must be a uuid")
+    |> validate_format(:asset_holder_id, @uuid_regex, message: "asset_holder_id must be a uuid")
     |> foreign_key_constraint(:blockchain_id)
     |> foreign_key_constraint(:wallet_id)
     |> foreign_key_constraint(:account_id)
     |> foreign_key_constraint(:asset_id)
+    |> foreign_key_constraint(:asset_holder_id)
   end
 end

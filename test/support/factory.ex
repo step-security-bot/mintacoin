@@ -8,6 +8,7 @@ defmodule Mintacoin.Factory do
     AccountFactory,
     AssetFactory,
     AssetHolderFactory,
+    BalancesFactory,
     BlockchainFactory,
     BlockchainTxFactory,
     WalletFactory

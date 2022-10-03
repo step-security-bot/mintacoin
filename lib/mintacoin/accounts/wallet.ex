@@ -7,7 +7,7 @@ defmodule Mintacoin.Wallet do
   import Ecto.Changeset
 
   alias Ecto.Changeset
-  alias Mintacoin.{Account, AssetHolder, Blockchain, BlockchainTx}
+  alias Mintacoin.{Account, AssetHolder, Balance, Blockchain, BlockchainTx}
 
   @type t :: %__MODULE__{
           public_key: String.t(),
@@ -29,6 +29,7 @@ defmodule Mintacoin.Wallet do
 
     has_many(:blockchain_txs, BlockchainTx)
     has_many(:asset_holders, AssetHolder)
+    has_many(:balances, Balance)
 
     timestamps()
   end

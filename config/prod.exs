@@ -26,6 +26,9 @@ config :mintacoin, blockchains_network: System.get_env("BLOCKCHAINS_NETWORK")
 # Stellar SDK configuration
 config :stellar_sdk, network: System.get_env("STELLAR_NETWORK")
 
+# Temporal API Authentication
+config :mintacoin, api_token: System.get_env("API_TOKEN")
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

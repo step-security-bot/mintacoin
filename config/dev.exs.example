@@ -35,6 +35,9 @@ config :mintacoin, encryption_variable: "HQHSCWQ4HNBMLFUWHU2S7H3KGU"
 # Configure blockchains network :testnet | :mainnet
 config :mintacoin, blockchains_network: System.get_env("BLOCKCHAINS_NETWORK")
 
+# Temporal API Authentication
+config :mintacoin, api_token: System.get_env("API_TOKEN")
+
 # Stellar SDK configuration
 config :stellar_sdk, network: :test
 

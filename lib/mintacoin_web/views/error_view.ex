@@ -14,5 +14,8 @@ defmodule MintacoinWeb.ErrorView do
     %{errors: %{detail: Phoenix.Controller.status_message_from_template(template)}}
   end
 
+  def render("401.json", %{message: message}),
+    do: %{status: :unauthorized, code: 401, detail: message}
+
   def render("error.json", %{message: message}), do: %{status: :error, message: message}
 end

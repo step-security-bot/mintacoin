@@ -37,3 +37,7 @@ config :mintacoin, encryption_variable: "HQHSCWQ4HNBMLFUWHU2S7H3KGU"
 
 # Stellar SDK configuration
 config :stellar_sdk, network: :test
+
+config :mintacoin,
+  api_token:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"

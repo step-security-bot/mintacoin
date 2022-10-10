@@ -7,7 +7,7 @@ defmodule MintacoinWeb.Router do
     plug MintacoinWeb.Plugs.VerifyApiToken
   end
 
-  scope "/api", MintacoinWeb do
+  scope "/", MintacoinWeb do
     pipe_through :api
 
     resources "/accounts", AccountsController, param: "address", except: [:index, :show]

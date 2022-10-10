@@ -14,20 +14,11 @@ config :mintacoin, MintacoinWeb.Endpoint, cache_static_manifest: "priv/static/ca
 # Do not print debug messages in production
 config :logger, level: :info
 
-# Fund account secret key
-config :mintacoin, stellar_fund_secret_key: System.get_env("STELLAR_FUND_SECRET_KEY")
-
-# Encryption variables for accounts signatures
-config :mintacoin, encryption_variable: System.get_env("ENCRYPTION_VARIABLE")
-
 # Configure blockchains network :testnet | :mainnet
-config :mintacoin, blockchains_network: System.get_env("BLOCKCHAINS_NETWORK")
+config :mintacoin, blockchains_network: :testnet
 
 # Stellar SDK configuration
-config :stellar_sdk, network: System.get_env("STELLAR_NETWORK")
-
-# Temporal API Authentication
-config :mintacoin, api_token: System.get_env("API_TOKEN")
+config :stellar_sdk, network: :test
 
 # ## SSL Support
 #

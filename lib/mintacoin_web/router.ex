@@ -4,9 +4,10 @@ defmodule MintacoinWeb.Router do
   pipeline :api do
     plug :accepts, ["json"]
     plug MintacoinWeb.Plugs.SetBlockchainNetwork
+    plug MintacoinWeb.Plugs.VerifyApiToken
   end
 
-  scope "/api", MintacoinWeb do
+  scope "/", MintacoinWeb do
     pipe_through :api
 
     resources "/accounts", AccountsController, param: "address", except: [:index, :show]

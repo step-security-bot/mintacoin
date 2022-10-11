@@ -6,7 +6,7 @@
 
 Abstracting the blockchain complexity away, and combining the power of Elixir and Stellar, Mintacoin provides a simple and reliable infrastructure layer to mint crypto assets and process payments with them.
 
-Reach the power of blockchain with just an API integration!.
+Reach the power of blockchain with just an API integration!
 
 ## Development
 
@@ -19,6 +19,10 @@ To start your Phoenix server:
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Run the tests with `mix test`.
+
+## API REST
+
+You can find the API documentation here: [API DOCUMENTATION][api-documentation]
 
 ## Changelog
 
@@ -46,3 +50,4 @@ Made with 💙 by [kommitters Open Source](https://kommit.co)
 [contributing]: https://github.com/kommitters/mintacoin/blob/main/CONTRIBUTING.md
 [www]: https://mintacoin.co
 [banner-img]: https://user-images.githubusercontent.com/1649973/170068587-1b4c1b0d-9b48-46d1-9aed-f99d1b2b84f8.png
+[api-documentation]: https://docs.mintacoin.co

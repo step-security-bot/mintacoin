@@ -62,4 +62,13 @@ if config_env() == :prod do
       port: port
     ],
     secret_key_base: secret_key_base
+
+  # Fund account secret key
+  config :mintacoin, stellar_fund_secret_key: System.fetch_env!("STELLAR_FUND_SECRET_KEY")
+
+  # Encryption variables for accounts signatures
+  config :mintacoin, encryption_variable: System.fetch_env!("ENCRYPTION_VARIABLE")
+
+  # Temporal API Authentication
+  config :mintacoin, api_token: System.fetch_env!("API_TOKEN")
 end

@@ -15,17 +15,31 @@ defmodule MintacoinWeb.AccountsControllerTest do
     blockchain = insert(:blockchain, %{name: "stellar", network: "testnet"})
     account = insert(:account, %{address: address, signature: signature})
 
+    api_token = Application.get_env(:mintacoin, :api_token)
+
+    conn_authenticated =
+      conn
+      |> put_req_header("accept", "application/json")
+      |> put_req_header("auth-token", "#{api_token}")
+
+    conn_invalid_token =
+      conn
+      |> put_req_header("accept", "application/json")
+      |> put_req_header("auth-token", "INVALID_TOKEN")
+
     %{
       account: account,
       address: address,
       signature: signature,
       blockchain: blockchain,
-      conn: put_req_header(conn, "accept", "application/json")
+      conn_authenticated: conn_authenticated,
+      conn_unauthenticated: put_req_header(conn, "accept", "application/json"),
+      conn_invalid_token: conn_invalid_token
     }
   end
 
   describe "create/2" do
-    test "with valid params", %{conn: conn, blockchain: %{name: blockchain_name}} do
+    test "with valid params", %{conn_authenticated: conn, blockchain: %{name: blockchain_name}} do
       conn = post(conn, Routes.accounts_path(conn, :create), %{blockchain: blockchain_name})
 
       %{
@@ -38,7 +52,7 @@ defmodule MintacoinWeb.AccountsControllerTest do
       } = json_response(conn, 201)
     end
 
-    test "when blockchain is not valid", %{conn: conn} do
+    test "when blockchain is not valid", %{conn_authenticated: conn} do
       conn = post(conn, Routes.accounts_path(conn, :create), %{blockchain: "INVALID"})
 
       %{
@@ -48,16 +62,42 @@ defmodule MintacoinWeb.AccountsControllerTest do
       } = json_response(conn, 400)
     end
 
-    test "when blockchain is not present", %{conn: conn} do
+    test "when blockchain is not present", %{conn_authenticated: conn} do
       conn = post(conn, Routes.accounts_path(conn, :create))
 
       json_response(conn, 400)
+    end
+
+    test "when authenticate token is invalid", %{
+      conn_invalid_token: conn,
+      blockchain: %{name: blockchain_name}
+    } do
+      conn = post(conn, Routes.accounts_path(conn, :create), %{blockchain: blockchain_name})
+
+      %{
+        "code" => 401,
+        "detail" => "Invalid authentication token",
+        "status" => "unauthorized"
+      } = json_response(conn, 401)
+    end
+
+    test "when authenticate token is not submit", %{
+      conn_unauthenticated: conn,
+      blockchain: %{name: blockchain_name}
+    } do
+      conn = post(conn, Routes.accounts_path(conn, :create), %{blockchain: blockchain_name})
+
+      %{
+        "code" => 401,
+        "detail" => "Missing authentication token",
+        "status" => "unauthorized"
+      } = json_response(conn, 401)
     end
   end
 
   describe "recover/2" do
     test "when params are valid", %{
-      conn: conn,
+      conn_authenticated: conn,
       address: address,
       account: %{signature: signature, seed_words: seed_words}
     } do
@@ -66,7 +106,10 @@ defmodule MintacoinWeb.AccountsControllerTest do
       %{"data" => %{"signature" => ^signature}, "status" => 200} = json_response(conn, 200)
     end
 
-    test "when address is invalid", %{conn: conn, account: %{seed_words: seed_words}} do
+    test "when address is invalid", %{
+      conn_authenticated: conn,
+      account: %{seed_words: seed_words}
+    } do
       conn =
         post(conn, Routes.accounts_path(conn, :recover, "INVALID_ADDRESS"), %{
           seed_words: seed_words
@@ -76,7 +119,7 @@ defmodule MintacoinWeb.AccountsControllerTest do
         json_response(conn, 400)
     end
 
-    test "when seed_words is invalid", %{conn: conn, address: address} do
+    test "when seed_words is invalid", %{conn_authenticated: conn, address: address} do
       conn =
         post(conn, Routes.accounts_path(conn, :recover, address), %{
           seed_words: "INVALID_SEED_WORDS"
@@ -89,10 +132,38 @@ defmodule MintacoinWeb.AccountsControllerTest do
       } = json_response(conn, 400)
     end
 
-    test "when seed_words are not present", %{conn: conn, address: address} do
+    test "when seed_words are not present", %{conn_authenticated: conn, address: address} do
       conn = post(conn, Routes.accounts_path(conn, :recover, address))
 
       json_response(conn, 400)
+    end
+
+    test "when authentication token is invalid", %{
+      conn_invalid_token: conn,
+      address: address,
+      account: %{seed_words: seed_words}
+    } do
+      conn = post(conn, Routes.accounts_path(conn, :recover, address), %{seed_words: seed_words})
+
+      %{
+        "code" => 401,
+        "detail" => "Invalid authentication token",
+        "status" => "unauthorized"
+      } = json_response(conn, 401)
+    end
+
+    test "when authentication token is not submit", %{
+      conn_unauthenticated: conn,
+      address: address,
+      account: %{seed_words: seed_words}
+    } do
+      conn = post(conn, Routes.accounts_path(conn, :recover, address), %{seed_words: seed_words})
+
+      %{
+        "code" => 401,
+        "detail" => "Missing authentication token",
+        "status" => "unauthorized"
+      } = json_response(conn, 401)
     end
   end
 end

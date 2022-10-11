@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1 (11.10.2022)
+* Add authorization plug for all endpoints.
+* Add deployment files.
+* Add continuous deployment workflow file.
+* Add API reference documentation.
+
 ## 0.2.0 (28.09.2022)
 * Add account, wallet, blockchain, and blockchain_tx tables and database functions.
 * Add account cipher and keypair services.

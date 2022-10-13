@@ -9,11 +9,17 @@ defmodule Mintacoin.Accounts.AccountsTest do
   import Mintacoin.Factory, only: [insert: 1, insert: 2]
 
   alias Ecto.Adapters.SQL.Sandbox
-  alias Mintacoin.{Account, Accounts, BlockchainTx, BlockchainTxs}
+  alias Mintacoin.{Account, Accounts, Accounts.StellarMock, BlockchainTx, BlockchainTxs}
   alias Mintacoin.Accounts.Workers.CreateAccount, as: CreateAccountWorker
 
   setup do
     :ok = Sandbox.checkout(Mintacoin.Repo)
+
+    Application.put_env(:mintacoin, :crypto_impl, StellarMock)
+
+    on_exit(fn ->
+      Application.delete_env(:mintacoin, :crypto_impl)
+    end)
 
     %{
       invalid_address: "INVALID_ADDRESS",

@@ -2,43 +2,44 @@
 
 ![banner][banner-img]
 
-[**Mintacoin**][www] is a minimalist and open-source API, that abstracts the blockchain complexity providing a simple and reliable infrastructure layer to mint your crypto assets, in addition to process payments with them.
+[**Mintacoin**][www] is a minimalist and open-source API, that abstracts the blockchain complexity providing a simple and reliable infrastructure layer to mint your crypto assets, in addition to process payments with them, for you and your company.
 
-Abstracting the blockchain complexity away, and combining the power of [Elixir][elixir] and [Stellar][stellar], Mintacoin aims to help developers adopting Web3.0 technologies in their solutions. Scaling down the costs, time and technical complexity around the crypto assets market.
+Abstracting the blockchain complexity away, and combining the power of [Elixir][elixir] and [Stellar][stellar], Mintacoin aims to help developers adopting Web3.0 and crypto technologies in their solutions. Scaling down the costs, time and technical complexity around the crypto assets market.
 
 Reach the power of blockchain with just an API integration!
 
 ## What can you do with Mintacoin?
 
-* Create Mintacoin accounts.
-* Create custom crypto assets.
-* Process payments with assets.
+- Create Mintacoin accounts.
+- Create custom crypto assets.
+- Process payments with assets.
 
 ### In progress - What we're working on now 🛠️
 
-* #34
-* #53
+- [Assets Feature](https://github.com/kommitters/mintacoin/issues/34)
+- [Dockerize local setup](https://github.com/kommitters/mintacoin/issues/53)
 
-### What we're working on next! 🪐
+### Todo - What we're working on next! 🪐
 
-* #55
-* #66
+- [Code refactor and improvement](https://github.com/kommitters/mintacoin/issues/55)
 
 ### Done - What we've already developed! 🚀
 
 <details>
 <summary>Click to expand!</summary>
-* #9
-* #10
-* #11
-* #15
-* #17
-* #18
-* #21
-* #22
-* #23
-* #25
-* #31
+
+ - [Implement the cipher service module](https://github.com/kommitters/mintacoin/issues/9)
+ - [Implement the keypair service module](https://github.com/kommitters/mintacoin/issues/10)
+ - [Implement the accounts database boundaries and functions](https://github.com/kommitters/mintacoin/issues/11)
+ - [Implement the blockchains database boundaries and functions](https://github.com/kommitters/mintacoin/issues/15)
+ - [Implement the wallets database boundaries and functions](https://github.com/kommitters/mintacoin/issues/17)
+ - [Implement the blockchain tx database boundaries and functions](https://github.com/kommitters/mintacoin/issues/18)
+ - [Create the crypto module for stellar (Mocked)](https://github.com/kommitters/mintacoin/issues/21)
+ - [Implement the accounts aggregate functions](https://github.com/kommitters/mintacoin/issues/22)
+ - [Create the accounts worker](https://github.com/kommitters/mintacoin/issues/23)
+ - [Implement the account creation function with the stellar SDK](https://github.com/kommitters/mintacoin/issues/25)
+ - [Implement the endpoint to create an account and recover signature](https://github.com/kommitters/mintacoin/issues/31)
+
 </details>
 
 ---

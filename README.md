@@ -14,14 +14,20 @@ Reach the power of blockchain with just an API integration!
 - Create custom crypto assets.
 - Process payments with assets.
 
+
+## Roadmap
+The latest updated branch to target a PR is v0.3
+
+You can see a big picture of the roadmap here: [**ROADMAP**][roadmap]
 ### In progress - What we're working on now 🛠️
 
-- [Assets Feature](https://github.com/kommitters/mintacoin/issues/34)
+- [Assets feature](https://github.com/kommitters/mintacoin/issues/34)
 - [Dockerize local setup](https://github.com/kommitters/mintacoin/issues/53)
 
 ### Todo - What we're working on next! 🪐
 
 - [Code refactor and improvement](https://github.com/kommitters/mintacoin/issues/55)
+- [Payments feature](https://github.com/kommitters/mintacoin/issues/66)
 
 ### Done - What we've already developed! 🚀
 
@@ -41,8 +47,6 @@ Reach the power of blockchain with just an API integration!
  - [Implement the endpoint to create an account and recover signature](https://github.com/kommitters/mintacoin/issues/31)
 
 </details>
-
----
 
 ## Want to jump in?
 
@@ -87,14 +91,14 @@ This library is licensed under an MIT license. See [LICENSE][license] for detail
 
 Made with 💙 by [kommitters Open Source](https://kommit.co)
 
+[banner-img]: https://user-images.githubusercontent.com/1649973/170068587-1b4c1b0d-9b48-46d1-9aed-f99d1b2b84f8.png
+[www]: https://mintacoin.co
 [elixir]: https://elixir-lang.org/
 [stellar]: https://stellar.org/
+[roadmap]:https://github.com/orgs/kommitters/projects/6/views/6
 [good-first-issues]: https://github.com/kommitters/mintacoin/issues?q=is%3Aissue+is%3Aopen+label%3A%22%F0%9F%91%8B+Good+first+issue%22
-[license]: https://github.com/kommitters/mintacoin/blob/main/LICENSE
-[coc]: https://github.com/kommitters/mintacoin/blob/main/CODE_OF_CONDUCT.md
-[changelog]: https://github.com/kommitters/mintacoin/blob/main/CHANGELOG.md
-[contributing]: https://github.com/kommitters/mintacoin/blob/main/CONTRIBUTING.md
-[www]: https://mintacoin.co
-[banner-img]: https://user-images.githubusercontent.com/1649973/170068587-1b4c1b0d-9b48-46d1-9aed-f99d1b2b84f8.png
 [api-documentation]: https://docs.mintacoin.co
-
+[changelog]: https://github.com/kommitters/mintacoin/blob/main/CHANGELOG.md
+[coc]: https://github.com/kommitters/mintacoin/blob/main/CODE_OF_CONDUCT.md
+[contributing]: https://github.com/kommitters/mintacoin/blob/main/CONTRIBUTING.md
+[license]: https://github.com/kommitters/mintacoin/blob/main/LICENSE

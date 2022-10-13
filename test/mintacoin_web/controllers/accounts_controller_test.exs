@@ -8,7 +8,15 @@ defmodule MintacoinWeb.AccountsControllerTest do
 
   import Mintacoin.Factory, only: [insert: 2]
 
+  alias Mintacoin.Accounts.StellarMock
+
   setup %{conn: conn} do
+    Application.put_env(:mintacoin, :crypto_impl, StellarMock)
+
+    on_exit(fn ->
+      Application.delete_env(:mintacoin, :crypto_impl)
+    end)
+
     address = "GB3ZYW3WZWQU6CAEA6EQ4ALER456DPVBC6YLQRDKTTSNEVJOGFCECX5L"
     signature = "SB3RAKL2MRYZ53WJQAL5RJ42LPCMJTNDH4W7UWVRJA3GTEC66BC7VNUT"
 

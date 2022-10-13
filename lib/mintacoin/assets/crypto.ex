@@ -1,20 +1,20 @@
-defmodule Mintacoin.Accounts.Crypto do
+defmodule Mintacoin.Assets.Crypto do
   @moduledoc """
   This module is responsible to handle the crypto calls for the different blockchains
   """
 
-  @behaviour Mintacoin.Accounts.Crypto.Spec
+  @behaviour Mintacoin.Assets.Crypto.Spec
 
-  alias Mintacoin.{Accounts.Stellar, Blockchain}
+  alias Mintacoin.{Assets.Stellar, Blockchain}
 
-  @type status :: :ok | :error
   @type blockchain :: String.t()
   @type impl :: Stellar
 
   @impl true
-  def create_account(opts \\ []) do
+  def create_asset(opts \\ []) do
     blockchain = Keyword.get(opts, :blockchain, Blockchain.default())
-    impl(blockchain).create_account(opts)
+
+    impl(blockchain).create_asset(opts)
   end
 
   @spec impl(blockchain :: blockchain()) :: impl()

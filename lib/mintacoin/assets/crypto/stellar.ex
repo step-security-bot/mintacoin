@@ -36,7 +36,7 @@ defmodule Mintacoin.Assets.Stellar do
     %{
       public_key: issuer_public_key,
       signature: issuer_signature
-    } = Application.get_env(:mintacoin, :stellar_fund_secret_key, nil) |> get_account_params()
+    } = master_account_secret_key() |> get_account_params()
 
     %{
       public_key: distributor_public_key,
@@ -46,6 +46,24 @@ defmodule Mintacoin.Assets.Stellar do
     issuer_public_key
     |> build_asset_operations(distributor_public_key, asset_code, asset_supply)
     |> build_envelope(issuer_public_key, [issuer_signature, distributor_signature])
+    |> execute_transaction()
+  end
+
+  @impl true
+  def create_trustline(opts) do
+    trustor_secret_key = Keyword.get(opts, :trustor_secret_key)
+    asset_code = Keyword.get(opts, :asset_code)
+
+    %{public_key: issuer_public_key} = master_account_secret_key() |> get_account_params()
+
+    %{
+      public_key: trustor_public_key,
+      signature: trustor_signature
+    } = get_account_params(trustor_secret_key)
+
+    issuer_public_key
+    |> build_trustline_operation(asset_code)
+    |> build_envelope(trustor_public_key, trustor_signature)
     |> execute_transaction()
   end
 
@@ -93,7 +111,16 @@ defmodule Mintacoin.Assets.Stellar do
     [trustline_operation, payment_operation]
   end
 
-  @spec trustline_operation(asset :: asset(), distributor_pk :: key()) :: change_trust()
+  @spec build_trustline_operation(issuer_pk :: key(), asset_code :: asset_code()) :: operations()
+  defp build_trustline_operation(issuer_pk, asset_code) do
+    asset = [code: asset_code, issuer: issuer_pk]
+
+    trustline_operation = trustline_operation(asset, nil)
+
+    [trustline_operation]
+  end
+
+  @spec trustline_operation(asset :: asset(), distributor_pk :: key() | nil) :: change_trust()
   defp trustline_operation(asset, distributor_pk) do
     TxBuild.ChangeTrust.new(
       asset: asset,
@@ -126,6 +153,10 @@ defmodule Mintacoin.Assets.Stellar do
       signature: signature
     }
   end
+
+  @spec master_account_secret_key() :: key() | nil
+  defp master_account_secret_key,
+    do: Application.get_env(:mintacoin, :stellar_fund_secret_key, nil)
 
   @spec format_response(tx_response :: {status(), stellar_response()}) :: impl_response()
   defp format_response(

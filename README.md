@@ -68,11 +68,41 @@ Check out our [Good first issues][good-first-issues], this is a great place to s
 
 ## Development
 
-To start your Phoenix server:
+Here we will show up the Mintacoin's setup for development purposes, follow the next steps:
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+**Requirements**
+
+- Elixir <= v1.14
+- Erlang <= 24.3
+- PostgreSQL >= v14 (latest)
+
+**Setting up**
+
+1. Install dependencies with:
+
+    `mix deps.get`
+
+2. Mintacoin requires a development configuration file. Copy the example with the following command:
+
+    `cp config/dev.exs.example config/dev.exs`
+
+3. Within the file `dev.exs` replace the following variables
+
+    - `"STELLAR_FUND_SECRET_KEY` with the secret key created from the [Stellar Laboratory][stellar-laboratory].
+    - `"BLOCKCHAINS_NETWORK"` with `"testnet"`
+    - `"API_TOKEN"` with `"any_api_token_value"`
+
+4. Create and migrate your database with:
+
+    `mix ecto.setup`
+
+5. Run the project in a terminal with `iex -S mix` and add the next record with:
+
+    `Mintacoin.Blockchains.create(%{name: "stellar", network: "testnet"})`
+
+6. Finally, start the Phoenix server with:
+
+    `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
@@ -109,6 +139,7 @@ Made with 💙 by [kommitters Open Source](https://kommit.co)
 [api-documentation]: https://docs.mintacoin.co
 [current-release]: https://github.com/kommitters/mintacoin/releases/tag/v0.2.2
 [latest-branch]: https://github.com/kommitters/mintacoin/tree/v0.3
+[stellar-laboratory]: (https://laboratory.stellar.org/#account-creator?network=test)
 [changelog]: https://github.com/kommitters/mintacoin/blob/main/CHANGELOG.md
 [coc]: https://github.com/kommitters/mintacoin/blob/main/CODE_OF_CONDUCT.md
 [contributing]: https://github.com/kommitters/mintacoin/blob/main/CONTRIBUTING.md

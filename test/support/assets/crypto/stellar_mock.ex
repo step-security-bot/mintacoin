@@ -46,4 +46,43 @@ defmodule Mintacoin.Assets.StellarMock do
        }
      }}
   end
+
+  @impl true
+  def create_trustline(_opts) do
+    {:ok,
+     %Mintacoin.Assets.Crypto.AssetResponse{
+       successful: Enum.random([true, false]),
+       tx_id: "22eb025e2281b2e35b2bd51bc5a3a102e8129b56dd1fc52145c0ce20dfcfe6c0",
+       tx_hash: "22eb025e2281b2e35b2bd51bc5a3a102e8129b56dd1fc52145c0ce20dfcfe6c0",
+       tx_timestamp: "2022-09-28 15:06:04Z",
+       tx_response: %{
+         created_at: ~U[2022-09-28 15:06:04Z],
+         envelope_xdr:
+           "AAAAAgAAAAApjxV21huhJI8dl8Fr7cxLOXoxqK6WU4rK65u1oETG+wAAAGQAA1//AAAABQAAAAAAAAAAAAAAAQAAAAAAAAAGAAAAAUFBQQAAAAAAnp/esIX7PL7ABBfR6ExdDDtvF+RpsN1ir9/gbtwg+Gt//////////wAAAAAAAAABoETG+wAAAECd0J+1MxhOu9Pj0qJM7ndVUXYJr+NnL+B3nlOeL4eUeo85aqgtABIUrgS1cuHzyfaD8IcDGcL2BIQCFgrfIjoK",
+         fee_charged: 100,
+         fee_meta_xdr:
+           "AAAAAgAAAAMAA5HfAAAAAAAAAAApjxV21huhJI8dl8Fr7cxLOXoxqK6WU4rK65u1oETG+wAAAAulbJ9wAANf/wAAAAQAAAADAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAADAAAAAAADkd8AAAAAYzRhxgAAAAAAAAABAAOSFQAAAAAAAAAAKY8VdtYboSSPHZfBa+3MSzl6MaiullOKyuubtaBExvsAAAALpWyfDAADX/8AAAAEAAAAAwAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAwAAAAAAA5HfAAAAAGM0YcYAAAAA",
+         hash: "22eb025e2281b2e35b2bd51bc5a3a102e8129b56dd1fc52145c0ce20dfcfe6c0",
+         id: "22eb025e2281b2e35b2bd51bc5a3a102e8129b56dd1fc52145c0ce20dfcfe6c0",
+         ledger: 234_005,
+         max_fee: 100,
+         memo: nil,
+         memo_type: "none",
+         operation_count: 1,
+         paging_token: "1005043822104576",
+         preconditions: nil,
+         result_meta_xdr:
+           "AAAAAgAAAAIAAAADAAOSFQAAAAAAAAAAKY8VdtYboSSPHZfBa+3MSzl6MaiullOKyuubtaBExvsAAAALpWyfDAADX/8AAAAEAAAAAwAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAwAAAAAAA5HfAAAAAGM0YcYAAAAAAAAAAQADkhUAAAAAAAAAACmPFXbWG6Ekjx2XwWvtzEs5ejGorpZTisrrm7WgRMb7AAAAC6VsnwwAA1//AAAABQAAAAMAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAMAAAAAAAOSFQAAAABjNGLcAAAAAAAAAAEAAAACAAAAAwADkd8AAAABAAAAACmPFXbWG6Ekjx2XwWvtzEs5ejGorpZTisrrm7WgRMb7AAAAAUFBQQAAAAAAnp/esIX7PL7ABBfR6ExdDDtvF+RpsN1ir9/gbtwg+GsAAAAAdzWUAH//////////AAAAAQAAAAAAAAAAAAAAAQADkhUAAAABAAAAACmPFXbWG6Ekjx2XwWvtzEs5ejGorpZTisrrm7WgRMb7AAAAAUFBQQAAAAAAnp/esIX7PL7ABBfR6ExdDDtvF+RpsN1ir9/gbtwg+GsAAAAAdzWUAH//////////AAAAAQAAAAAAAAAAAAAAAA==",
+         result_xdr: "AAAAAAAAAGQAAAAAAAAAAQAAAAAAAAAGAAAAAAAAAAA=",
+         signatures: [
+           "ndCftTMYTrvT49KiTO53VVF2Ca/jZy/gd55Tni+HlHqPOWqoLQASFK4EtXLh88n2g/CHAxnC9gSEAhYK3yI6Cg=="
+         ],
+         source_account: "GAUY6FLW2YN2CJEPDWL4C27NZRFTS6RRVCXJMU4KZLVZXNNAITDPXOEZ",
+         source_account_sequence: 949_973_751_431_173,
+         successful: true,
+         valid_after: nil,
+         valid_before: nil
+       }
+     }}
+  end
 end

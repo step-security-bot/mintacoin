@@ -9,4 +9,5 @@ defmodule Mintacoin.Assets.Crypto.Spec do
   @type response :: {:ok, AssetResponse.t()} | {:error, map()}
 
   @callback create_asset(opts()) :: response()
+  @callback create_trustline(opts()) :: response()
 end

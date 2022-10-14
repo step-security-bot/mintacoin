@@ -23,4 +23,14 @@ defmodule Mintacoin.Assets.CryptoTest do
        }} = Crypto.create_asset()
     end
   end
+
+  describe "create_trustline/1" do
+    test "with the stellar blockchain" do
+      {:ok,
+       %AssetResponse{
+         tx_id: "22eb025e2281b2e35b2bd51bc5a3a102e8129b56dd1fc52145c0ce20dfcfe6c0",
+         tx_hash: "22eb025e2281b2e35b2bd51bc5a3a102e8129b56dd1fc52145c0ce20dfcfe6c0"
+       }} = Crypto.create_trustline()
+    end
+  end
 end

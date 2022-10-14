@@ -17,6 +17,13 @@ defmodule Mintacoin.Assets.Crypto do
     impl(blockchain).create_asset(opts)
   end
 
+  @impl true
+  def create_trustline(opts \\ []) do
+    blockchain = Keyword.get(opts, :blockchain, Blockchain.default())
+
+    impl(blockchain).create_trustline(opts)
+  end
+
   @spec impl(blockchain :: blockchain()) :: impl()
   defp impl("stellar"), do: Application.get_env(:mintacoin, :crypto_impl, Stellar)
 end

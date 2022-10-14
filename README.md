@@ -8,56 +8,63 @@ Abstracting the blockchain complexity away, and combining the power of [Elixir][
 
 Reach the power of blockchain with just an API integration!
 
-## What can you do with Mintacoin?
+**Web3.0 issues**
 
-- Create Mintacoin accounts.
-- Create custom crypto assets.
-- Process payments with assets.
+Adopting web3.0 technologies implies technical knowledge, not just regular but specialized to each technology, ecosystem, and protocol, this drift into:
 
+- High technical complexity. 🧐
+- Time and effort. ⏳
+- The slow market thus high development costs. 📑
 
-## Roadmap
-The latest updated branch to target a PR is v0.3
+**What is the Mintacoin goal ?**
 
-You can see a big picture of the roadmap here: [**ROADMAP**][roadmap]
-### In progress - What we're working on now 🛠️
+Reduce the adoption rate between developers and web3.0 technologies, through an API REST instead of a blockchain. Besides, this will solve the problems previously mentioned. 🎯
 
-- [Assets feature](https://github.com/kommitters/mintacoin/issues/34)
-- [Dockerize local setup](https://github.com/kommitters/mintacoin/issues/53)
+**Why Mintacoin ?**
 
-### Todo - What we're working on next! 🪐
+Is noticeable that Web3.0 needs many infrastructure layers which aid the UX with the usage of blockchain technologies, and Mintacoin provides a simple layer. Amazing right? 🚀
 
-- [Code refactor and improvement](https://github.com/kommitters/mintacoin/issues/55)
-- [Payments feature](https://github.com/kommitters/mintacoin/issues/66)
+**Who are the Mintacoin users ?**
 
-### Done - What we've already developed! 🚀
+Software developers. 👩‍💻👨‍💻
 
-<details>
-<summary>Click to expand!</summary>
+**What can you do with Mintacoin?**
 
- - [Implement the cipher service module](https://github.com/kommitters/mintacoin/issues/9)
- - [Implement the keypair service module](https://github.com/kommitters/mintacoin/issues/10)
- - [Implement the accounts database boundaries and functions](https://github.com/kommitters/mintacoin/issues/11)
- - [Implement the blockchains database boundaries and functions](https://github.com/kommitters/mintacoin/issues/15)
- - [Implement the wallets database boundaries and functions](https://github.com/kommitters/mintacoin/issues/17)
- - [Implement the blockchain tx database boundaries and functions](https://github.com/kommitters/mintacoin/issues/18)
- - [Create the crypto module for stellar (Mocked)](https://github.com/kommitters/mintacoin/issues/21)
- - [Implement the accounts aggregate functions](https://github.com/kommitters/mintacoin/issues/22)
- - [Create the accounts worker](https://github.com/kommitters/mintacoin/issues/23)
- - [Implement the account creation function with the stellar SDK](https://github.com/kommitters/mintacoin/issues/25)
- - [Implement the endpoint to create an account and recover signature](https://github.com/kommitters/mintacoin/issues/31)
+- Create Mintacoin accounts. 💳
+- Create custom crypto assets. 🪙
+- Process payments with assets. 💰
 
-</details>
-
-## Want to jump in?
-
-Check out our [Good first issues][good-first-issues], this is a great place to start contributing if you're new to the project!
-
-We welcome contributions from anyone! Check out our [contributing guide][contributing] for more information.
+---
 
 ## API REST
 
 You can find the API documentation here: [API DOCUMENTATION][api-documentation]
 
+---
+
+## Roadmap
+The current release for the project is the version [**v0.2.2**][current-release].
+
+To know the current status of the project, you can check Mintacoin's roadmap here: [**ROADMAP**][roadmap] 🗺️
+
+The following table shows up the tasks created until the moment:
+
+| **Status**          | **Issues** |
+| ---                 | ---        |
+| **Todo 🛠️**         | [Code refactor and improvement](https://github.com/kommitters/mintacoin/issues/55) <br> [Payments feature](https://github.com/kommitters/mintacoin/issues/66) <br> [Customers feature](https://github.com/kommitters/mintacoin/issues/69) |
+| **In progress 🚀**  | [Assets feature](https://github.com/kommitters/mintacoin/issues/34) <br> [Dockerize local setup](https://github.com/kommitters/mintacoin/issues/53) |
+| **Done 🪐**         |  <br> [Implement the cipher service module](https://github.com/kommitters/mintacoin/issues/9) <br> [Implement the keypair service module](https://github.com/kommitters/mintacoin/issues/10) <br> [Implement the accounts atabase boundaries and functions](https://github.com/kommitters/mintacoin/issues/11) <br> [Implement the blockchains database boundaries and functions](https://github.com/kommitters/mintacoin/issues/15) <br> [Implement the wallets database boundaries and functions](https://github.com/kommitters/mintacoin/issues/17) <br> [Implement the blockchain tx database boundaries and functions](https://github.com/kommitters/mintacoin/ssues/18) <br> [Create the crypto module for stellar (Mocked)](https://github.com/kommitters/mintacoin/issues/21) <br> [Implement the accounts aggregate functions](https://github.com/kommitters/mintacoin/issues/22) <br> [Create the accounts worker](https://github.com/kommitters/mintacoin/issues/23) <br> [Implement the account creation function with the stellar SDK](https://github.com/kommitters/mintacoin/issues/25) <br> [Implement the endpoint to create an account and recover signature](https://github.com/kommitters/mintacoin/issues/31) |
+
+
+**Do you want to contribute Mintacoin ?**
+
+We really appreciate your interest and effort in Mintacoin's advance and support, check out our [contributing guide][contributing] before the coding.
+
+If you want to contribute to Mintacoin, the latest target branch to submit a PR is the [**branch v0.3**][latest-branch].
+
+Check out our [Good first issues][good-first-issues], this is a great place to start contributing if you're new to the project!
+
+---
 
 ## Development
 
@@ -70,6 +77,8 @@ To start your Phoenix server:
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Run the tests with `mix test`.
+
+---
 
 ## Changelog
 
@@ -98,6 +107,8 @@ Made with 💙 by [kommitters Open Source](https://kommit.co)
 [roadmap]:https://github.com/orgs/kommitters/projects/6/views/6
 [good-first-issues]: https://github.com/kommitters/mintacoin/issues?q=is%3Aissue+is%3Aopen+label%3A%22%F0%9F%91%8B+Good+first+issue%22
 [api-documentation]: https://docs.mintacoin.co
+[current-release]: https://github.com/kommitters/mintacoin/releases/tag/v0.2.2
+[latest-branch]: https://github.com/kommitters/mintacoin/tree/v0.3
 [changelog]: https://github.com/kommitters/mintacoin/blob/main/CHANGELOG.md
 [coc]: https://github.com/kommitters/mintacoin/blob/main/CODE_OF_CONDUCT.md
 [contributing]: https://github.com/kommitters/mintacoin/blob/main/CONTRIBUTING.md

@@ -23,4 +23,9 @@ defmodule Mintacoin.Wallets do
 
   @spec retrieve_by_public_key(public_key :: public_key()) :: {:ok, wallet()}
   def retrieve_by_public_key(public_key), do: {:ok, Repo.get_by(Wallet, public_key: public_key)}
+
+  @spec retrieve_by_account_id_and_blockchain_id(account_id :: id(), blockchain_id :: id()) ::
+          {:ok, wallet()}
+  def retrieve_by_account_id_and_blockchain_id(account_id, blockchain_id),
+    do: {:ok, Repo.get_by(Wallet, account_id: account_id, blockchain_id: blockchain_id)}
 end

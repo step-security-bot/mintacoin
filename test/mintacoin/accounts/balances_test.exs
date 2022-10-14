@@ -106,6 +106,13 @@ defmodule Mintacoin.BalancesTest do
     end
   end
 
+  describe "increase_balance/2" do
+    test "with valid params", %{balance: %{id: balance_id}} do
+      {:ok, %Balance{id: ^balance_id, balance: "30"}} =
+        Balances.increase_balance(balance_id, "20")
+    end
+  end
+
   describe "update_by_wallet_id_and_asset_id/2" do
     test "with valid params", %{
       balance: %{id: balance_id, wallet_id: wallet_id, asset_id: asset_id}

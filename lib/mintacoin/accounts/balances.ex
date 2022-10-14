@@ -2,7 +2,7 @@ defmodule Mintacoin.Balances do
   @moduledoc """
   This module is responsible for doing operations for Balances
   """
-  import Ecto.Query
+  import Ecto.Query, only: [from: 2]
 
   alias Ecto.{Changeset, UUID}
   alias Mintacoin.{Balance, Repo, Wallet}
@@ -12,6 +12,7 @@ defmodule Mintacoin.Balances do
   @type error :: Changeset.t()
   @type balance :: Balance.t()
   @type balances :: Balance.t() | []
+  @type amount :: Balance.balance()
 
   @spec create(changes :: changes()) :: {:ok, balance()} | {:error, error()}
   def create(changes) do
@@ -38,6 +39,20 @@ defmodule Mintacoin.Balances do
 
     balance
     |> Balance.changeset(changes)
+    |> Repo.update()
+  end
+
+  @spec increase_balance(id :: id(), amount :: amount()) :: {:ok, balance()} | {:error, error()}
+  def increase_balance(id, amount) do
+    %Balance{balance: balance_amount} = balance = Repo.get(Balance, id)
+
+    new_balance =
+      balance_amount
+      |> Decimal.add(amount)
+      |> Decimal.to_string(:normal)
+
+    balance
+    |> Balance.changeset(%{balance: new_balance})
     |> Repo.update()
   end
 

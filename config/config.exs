@@ -28,7 +28,7 @@ config :phoenix, :json_library, Jason
 # Oban configuration
 config :mintacoin, Oban,
   repo: Mintacoin.Repo,
-  queues: [default: 2, create_account_queue: 2]
+  queues: [default: 2, create_account_queue: 2, create_asset_queue: 2]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

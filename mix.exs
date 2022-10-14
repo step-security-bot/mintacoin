@@ -54,7 +54,8 @@ defmodule Mintacoin.MixProject do
       {:ex_machina, "~> 2.7", only: :test},
       {:ecto_enum, "~> 1.4"},
       {:oban, "~> 2.13"},
-      {:stellar_sdk, "~> 0.10.0"}
+      {:stellar_sdk, "~> 0.10.0"},
+      {:decimal, "~> 2.0"}
     ]
   end
 

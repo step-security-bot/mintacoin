@@ -11,7 +11,7 @@ defmodule Mintacoin.AssetFactory do
       @spec asset_factory(attrs :: map()) :: Asset.t()
       def asset_factory(attrs) do
         code = Map.get(attrs, :code, sequence(:code, &"MTK#{&1}"))
-        supply = Map.get(attrs, :supply, 1000)
+        supply = Map.get(attrs, :supply, "1000")
 
         %Asset{
           id: UUID.generate(),

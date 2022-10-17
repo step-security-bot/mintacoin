@@ -2,58 +2,49 @@
 
 ![banner][banner-img]
 
-[**Mintacoin**][www] is a minimalist and open-source API, that abstracts the blockchain complexity providing a simple and reliable infrastructure layer to mint your crypto assets, in addition to process payments with them, for you and your company.
-
-Abstracting the blockchain complexity away, and combining the power of [Elixir][elixir] and [Stellar][stellar], Mintacoin aims to help developers adopting Web3.0 and crypto technologies in their solutions. Scaling down the costs, time and technical complexity around the crypto assets market.
+[**Mintacoin**][www] is a minimalist and open-source API that abstracts the blockchain complexity by providing a simple and reliable infrastructure layer to mint your crypto assets and process payments with them.
 
 Reach the power of blockchain with just an API integration!
 
-**Web3.0 issues**
+## What can you do with Mintacoin?
 
-Adopting web3.0 technologies implies technical knowledge, not just regular but specialized to each technology, ecosystem, and protocol, this drift into:
+Mintacoin will provide endpoints so you can:
+- Create accounts.
+- Create crypto assets.
+- Process payments.
 
-- High technical complexity. 🧐
-- Time and effort. ⏳
-- The slow market thus high development costs. 📑
+All of this on **multiple blockchains** using a single account, just worrying about two keys we'll give you: an **address** and a **signature**. 👌
 
-**What is the Mintacoin goal ?**
+## Motivation
 
-Reduce the adoption rate between developers and web3.0 technologies, through an API REST instead of a blockchain. Besides, this will solve the problems previously mentioned. 🎯
+The adoption of Web3 implies technical knowledge specific to each technology, ecosystem or protocol. This results in:
 
-**Why Mintacoin ?**
+- High technical complexity.
+- Time and effort.
+- Slow time to market, therefore high development costs.
 
-Is noticeable that Web3.0 needs many infrastructure layers which aid the UX with the usage of blockchain technologies, and Mintacoin provides a simple layer. Amazing right? 🚀
+Mintacoin aims to solve these current Web3 issues!
 
-**Who are the Mintacoin users ?**
+## Why Mintacoin?
 
-Software developers. 👩‍💻👨‍💻
+It's clear that Web3 needs additional infrastructure layers that facilitate the user experience (UX) in the use of blockchain technologies.
 
-**What can you do with Mintacoin?**
+Mintacoin offers a simple and reliable infrastructure layer, so people can focus on their core business and not on the issues mentioned above. 🚀
 
-- Create Mintacoin accounts. 💳
-- Create custom crypto assets. 🪙
-- Process payments with assets. 💰
+## What do we want to achieve?
 
----
+- Make straightforward the adoption of Web3 technologies for developers by proposing interaction with a REST API rather than a blockchain.
 
-## API REST
+- Reduce technical complexity, costs, and time to the market for solutions around crypto assets.
 
-You can find the API documentation here: [API DOCUMENTATION][api-documentation]
+## Documentation
 
----
+Mintacoin's documentation is available here: [docs.mintacoin.co](https://docs.mintacoin.co)
 
 ## Roadmap
 The current release for the project is the version [**v0.2.2**][current-release].
 
 To know the current status of the project, you can check Mintacoin's roadmap here: [**ROADMAP**][roadmap] 🗺️
-
-The following table shows up the tasks created until the moment:
-
-| **Status**          | **Issues** |
-| ---                 | ---        |
-| **Todo 🛠️**         | [Code refactor and improvement](https://github.com/kommitters/mintacoin/issues/55) <br> [Payments feature](https://github.com/kommitters/mintacoin/issues/66) <br> [Customers feature](https://github.com/kommitters/mintacoin/issues/69) |
-| **In progress 🚀**  | [Assets feature](https://github.com/kommitters/mintacoin/issues/34) <br> [Dockerize local setup](https://github.com/kommitters/mintacoin/issues/53) |
-| **Done 🪐**         |  <br> [Implement the cipher service module](https://github.com/kommitters/mintacoin/issues/9) <br> [Implement the keypair service module](https://github.com/kommitters/mintacoin/issues/10) <br> [Implement the accounts atabase boundaries and functions](https://github.com/kommitters/mintacoin/issues/11) <br> [Implement the blockchains database boundaries and functions](https://github.com/kommitters/mintacoin/issues/15) <br> [Implement the wallets database boundaries and functions](https://github.com/kommitters/mintacoin/issues/17) <br> [Implement the blockchain tx database boundaries and functions](https://github.com/kommitters/mintacoin/ssues/18) <br> [Create the crypto module for stellar (Mocked)](https://github.com/kommitters/mintacoin/issues/21) <br> [Implement the accounts aggregate functions](https://github.com/kommitters/mintacoin/issues/22) <br> [Create the accounts worker](https://github.com/kommitters/mintacoin/issues/23) <br> [Implement the account creation function with the stellar SDK](https://github.com/kommitters/mintacoin/issues/25) <br> [Implement the endpoint to create an account and recover signature](https://github.com/kommitters/mintacoin/issues/31) |
 
 
 **Do you want to contribute Mintacoin ?**
@@ -132,8 +123,6 @@ Made with 💙 by [kommitters Open Source](https://kommit.co)
 
 [banner-img]: https://user-images.githubusercontent.com/1649973/170068587-1b4c1b0d-9b48-46d1-9aed-f99d1b2b84f8.png
 [www]: https://mintacoin.co
-[elixir]: https://elixir-lang.org/
-[stellar]: https://stellar.org/
 [roadmap]:https://github.com/orgs/kommitters/projects/6/views/6
 [good-first-issues]: https://github.com/kommitters/mintacoin/issues?q=is%3Aissue+is%3Aopen+label%3A%22%F0%9F%91%8B+Good+first+issue%22
 [api-documentation]: https://docs.mintacoin.co

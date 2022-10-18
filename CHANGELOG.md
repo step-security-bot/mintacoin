@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.2 (18.10.2022)
+* Update README documentation.
+
 ## 0.2.1 (11.10.2022)
 * Add authorization plug for all endpoints.
 * Add deployment files.

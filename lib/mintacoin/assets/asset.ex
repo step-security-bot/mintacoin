@@ -11,7 +11,7 @@ defmodule Mintacoin.Asset do
   alias Mintacoin.{AssetHolder, Balance, BlockchainTx}
 
   @type code :: String.t()
-  @type supply :: integer()
+  @type supply :: String.t()
   @type t :: %__MODULE__{code: code(), supply: supply()}
 
   @code_regex ~r/^[[:alnum:]]{1,10}$/
@@ -19,7 +19,7 @@ defmodule Mintacoin.Asset do
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "assets" do
     field(:code, :string)
-    field(:supply, :integer)
+    field(:supply, :string)
 
     has_many(:blockchain_txs, BlockchainTx)
     has_many(:asset_holders, AssetHolder)
@@ -33,7 +33,6 @@ defmodule Mintacoin.Asset do
     asset
     |> cast(changes, [:supply])
     |> validate_required([:supply])
-    |> validate_number(:supply, greater_than: 0)
   end
 
   @spec create_changeset(asset :: %__MODULE__{}, changes :: map()) :: Changeset.t()
@@ -42,6 +41,5 @@ defmodule Mintacoin.Asset do
     |> cast(changes, [:code, :supply])
     |> validate_required([:code, :supply])
     |> validate_format(:code, @code_regex, message: "code must be alphanumeric")
-    |> validate_number(:supply, greater_than: 0)
   end
 end

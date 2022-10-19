@@ -9,9 +9,11 @@ defmodule Mintacoin.Assets.StellarMock do
 
   @impl true
   def create_asset(_opts) do
+    default_status = Enum.random([true, false])
+
     {:ok,
      %AssetResponse{
-       successful: Enum.random([true, false]),
+       successful: Application.get_env(:stellar_mock, :tx_status, default_status),
        tx_id: "cda25a0c343a411a3ca2927d48454abaff9ccbebd8a5c292695d0aec30b133ca",
        tx_hash: "cda25a0c343a411a3ca2927d48454abaff9ccbebd8a5c292695d0aec30b133ca",
        tx_timestamp: DateTime.to_string(~U[2022-09-27 20:16:51Z]),

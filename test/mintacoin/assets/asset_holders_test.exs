@@ -204,14 +204,14 @@ defmodule Mintacoin.Assets.AssetHoldersTest do
       not_existing_uuid: not_existing_uuid,
       asset_holder: %{asset_id: asset_id}
     } do
-      {:ok, nil} = AssetHolders.retrieve_by_account_id_and_asset_id(asset_id, not_existing_uuid)
+      {:ok, nil} = AssetHolders.retrieve_by_account_id_and_asset_id(not_existing_uuid, asset_id)
     end
 
     test "when asset does not exists", %{
       not_existing_uuid: not_existing_uuid,
       asset_holder: %{account_id: account_id}
     } do
-      {:ok, nil} = AssetHolders.retrieve_by_account_id_and_asset_id(not_existing_uuid, account_id)
+      {:ok, nil} = AssetHolders.retrieve_by_account_id_and_asset_id(account_id, not_existing_uuid)
     end
   end
 
@@ -223,18 +223,31 @@ defmodule Mintacoin.Assets.AssetHoldersTest do
         AssetHolders.retrieve_by_wallet_id_and_asset_id(wallet_id, asset_id)
     end
 
-    test "when wallet does not exists", %{
+    test "when asset does not exists", %{
       asset_holder: %{wallet_id: wallet_id},
       not_existing_uuid: not_existing_uuid
     } do
       {:ok, nil} = AssetHolders.retrieve_by_wallet_id_and_asset_id(wallet_id, not_existing_uuid)
     end
 
-    test "when asset does not exists", %{
+    test "when wallet does not exists", %{
       asset_holder: %{asset_id: asset_id},
       not_existing_uuid: not_existing_uuid
     } do
       {:ok, nil} = AssetHolders.retrieve_by_wallet_id_and_asset_id(not_existing_uuid, asset_id)
+    end
+  end
+
+  describe "retrieve_minter_by_wallet_id_and_asset_code/2" do
+    test "when wallet exists", %{
+      asset_holder: %{id: asset_holder_id, wallet_id: wallet_id, asset: %{code: asset_code}}
+    } do
+      {:ok, %AssetHolder{id: ^asset_holder_id}} =
+        AssetHolders.retrieve_minter_by_wallet_id_and_asset_code(wallet_id, asset_code)
+    end
+
+    test "when asset_code does not exists", %{asset_holder: %{wallet_id: wallet_id}} do
+      {:ok, nil} = AssetHolders.retrieve_minter_by_wallet_id_and_asset_code(wallet_id, "MTK")
     end
   end
 end

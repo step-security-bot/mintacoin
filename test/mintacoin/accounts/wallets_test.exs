@@ -258,6 +258,34 @@ defmodule Mintacoin.Accounts.WalletsTest do
     end
   end
 
+  describe "retrieve_by_account_id_and_blockchain_id/2" do
+    setup [:create_wallet]
+
+    test "when wallet exist", %{
+      wallet_id: wallet_id,
+      account_id: account_id,
+      blockchain_id: blockchain_id
+    } do
+      {:ok, %Wallet{id: ^wallet_id}} =
+        Wallets.retrieve_by_account_id_and_blockchain_id(account_id, blockchain_id)
+    end
+
+    test "when account_id doesn't exist", %{
+      not_existing_uuid: not_existing_uuid,
+      blockchain_id: blockchain_id
+    } do
+      {:ok, nil} =
+        Wallets.retrieve_by_account_id_and_blockchain_id(not_existing_uuid, blockchain_id)
+    end
+
+    test "when blockchain_id doesn't exist", %{
+      not_existing_uuid: not_existing_uuid,
+      account_id: account_id
+    } do
+      {:ok, nil} = Wallets.retrieve_by_account_id_and_blockchain_id(account_id, not_existing_uuid)
+    end
+  end
+
   defp create_wallet(%{public_key: public_key}) do
     %Wallet{id: wallet_id, blockchain_id: blockchain_id, account_id: account_id} =
       insert(:wallet, %{public_key: public_key})

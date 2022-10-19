@@ -22,7 +22,7 @@ defmodule Mintacoin.BalancesTest do
       wallet: wallet,
       asset: asset,
       balance: balance,
-      balance_amount: "1234",
+      balance_amount: "1234.747474",
       not_existing_uuid: "4b70e51f-380b-4e00-b6c3-37e8afff8415"
     }
   end
@@ -101,8 +101,15 @@ defmodule Mintacoin.BalancesTest do
 
   describe "update/2" do
     test "with valid params", %{balance: %{id: balance_id}} do
-      {:ok, %Balance{id: ^balance_id, balance: "20"}} =
-        Balances.update(balance_id, %{balance: "20"})
+      {:ok, %Balance{id: ^balance_id, balance: "20.734766"}} =
+        Balances.update(balance_id, %{balance: "20.734766"})
+    end
+  end
+
+  describe "increase_balance/2" do
+    test "with valid params", %{balance: %{id: balance_id}} do
+      {:ok, %Balance{id: ^balance_id, balance: "30.5478"}} =
+        Balances.increase_balance(balance_id, "20.5478")
     end
   end
 
@@ -110,8 +117,8 @@ defmodule Mintacoin.BalancesTest do
     test "with valid params", %{
       balance: %{id: balance_id, wallet_id: wallet_id, asset_id: asset_id}
     } do
-      {:ok, %Balance{id: ^balance_id, balance: "20"}} =
-        Balances.update_by_wallet_id_and_asset_id(wallet_id, asset_id, %{balance: "20"})
+      {:ok, %Balance{id: ^balance_id, balance: "20.47634"}} =
+        Balances.update_by_wallet_id_and_asset_id(wallet_id, asset_id, %{balance: "20.47634"})
     end
   end
 

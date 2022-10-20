@@ -20,32 +20,32 @@ defmodule MintacoinWeb.Plugs.VerifyApiToken do
     basic_token = get_token(conn)
     valid_token = Application.get_env(:mintacoin, :api_token)
 
-    resolve_authentication(basic_token, valid_token, conn)
+    resolve_authorization(basic_token, valid_token, conn)
   end
 
-  @spec resolve_authentication(token :: token(), token :: token(), conn :: conn()) :: conn()
-  defp resolve_authentication(token, token, conn), do: conn
+  @spec resolve_authorization(token :: token(), token :: token(), conn :: conn()) :: conn()
+  defp resolve_authorization(token, token, conn), do: conn
 
-  defp resolve_authentication(nil, _token, conn) do
+  defp resolve_authorization(nil, _token, conn) do
     conn
     |> put_status(:unauthorized)
     |> put_view(ErrorView)
-    |> render("401.json", %{message: "Missing authentication token"})
+    |> render("401.json", %{message: "Missing authorization Bearer token"})
     |> halt()
   end
 
-  defp resolve_authentication(_request_token, _token, conn) do
+  defp resolve_authorization(_request_token, _token, conn) do
     conn
     |> put_status(:unauthorized)
     |> put_view(ErrorView)
-    |> render("401.json", %{message: "Invalid authentication token"})
+    |> render("401.json", %{message: "Invalid authorization Bearer token"})
     |> halt()
   end
 
   @spec get_token(conn :: conn()) :: token()
   defp get_token(conn) do
-    case get_req_header(conn, "auth-token") do
-      [token] -> token
+    case get_req_header(conn, "authorization") do
+      ["Bearer " <> token] -> token
       _header -> nil
     end
   end

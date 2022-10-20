@@ -28,12 +28,12 @@ defmodule MintacoinWeb.AccountsControllerTest do
     conn_authenticated =
       conn
       |> put_req_header("accept", "application/json")
-      |> put_req_header("auth-token", "#{api_token}")
+      |> put_req_header("authorization", "Bearer #{api_token}")
 
     conn_invalid_token =
       conn
       |> put_req_header("accept", "application/json")
-      |> put_req_header("auth-token", "INVALID_TOKEN")
+      |> put_req_header("authorization", "Bearer INVALID_TOKEN")
 
     %{
       account: account,
@@ -84,7 +84,7 @@ defmodule MintacoinWeb.AccountsControllerTest do
 
       %{
         "code" => 401,
-        "detail" => "Invalid authentication token",
+        "detail" => "Invalid authorization Bearer token",
         "status" => "unauthorized"
       } = json_response(conn, 401)
     end
@@ -97,7 +97,7 @@ defmodule MintacoinWeb.AccountsControllerTest do
 
       %{
         "code" => 401,
-        "detail" => "Missing authentication token",
+        "detail" => "Missing authorization Bearer token",
         "status" => "unauthorized"
       } = json_response(conn, 401)
     end
@@ -146,7 +146,7 @@ defmodule MintacoinWeb.AccountsControllerTest do
       json_response(conn, 400)
     end
 
-    test "when authentication token is invalid", %{
+    test "when authorization Bearer token is invalid", %{
       conn_invalid_token: conn,
       address: address,
       account: %{seed_words: seed_words}
@@ -155,12 +155,12 @@ defmodule MintacoinWeb.AccountsControllerTest do
 
       %{
         "code" => 401,
-        "detail" => "Invalid authentication token",
+        "detail" => "Invalid authorization Bearer token",
         "status" => "unauthorized"
       } = json_response(conn, 401)
     end
 
-    test "when authentication token is not submit", %{
+    test "when authorization Bearer token is not submit", %{
       conn_unauthenticated: conn,
       address: address,
       account: %{seed_words: seed_words}
@@ -169,7 +169,7 @@ defmodule MintacoinWeb.AccountsControllerTest do
 
       %{
         "code" => 401,
-        "detail" => "Missing authentication token",
+        "detail" => "Missing authorization Bearer token",
         "status" => "unauthorized"
       } = json_response(conn, 401)
     end

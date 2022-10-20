@@ -23,8 +23,6 @@ defmodule Mintacoin.BlockchainTx do
           tx_response: map()
         }
 
-  @uuid_regex ~r/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/
-
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "blockchain_txs" do
     belongs_to(:blockchain, Blockchain, type: :binary_id)
@@ -69,11 +67,6 @@ defmodule Mintacoin.BlockchainTx do
       :tx_response
     ])
     |> validate_required([:blockchain_id])
-    |> validate_format(:blockchain_id, @uuid_regex, message: "blockchain_id must be a uuid")
-    |> validate_format(:wallet_id, @uuid_regex, message: "wallet_id must be a uuid")
-    |> validate_format(:account_id, @uuid_regex, message: "account_id must be a uuid")
-    |> validate_format(:asset_id, @uuid_regex, message: "asset_id must be a uuid")
-    |> validate_format(:asset_holder_id, @uuid_regex, message: "asset_holder_id must be a uuid")
     |> foreign_key_constraint(:blockchain_id)
     |> foreign_key_constraint(:wallet_id)
     |> foreign_key_constraint(:account_id)

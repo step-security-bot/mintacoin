@@ -41,8 +41,7 @@ defmodule Mintacoin.Blockchains.BlockchainTxsTest do
       tx_timestamp: "~U[2022-06-29 15:45:45Z]",
       successful: true,
       tx_response: %{successful: true},
-      not_found_uuid: "d9cb83d6-05f5-4557-b5d0-9e1728c42091",
-      invalid_uuid: "INVALID-UUID"
+      not_found_uuid: "d9cb83d6-05f5-4557-b5d0-9e1728c42091"
     }
   end
 
@@ -102,59 +101,6 @@ defmodule Mintacoin.Blockchains.BlockchainTxsTest do
            blockchain_id: {"can't be blank", _}
          ]
        }} = BlockchainTxs.create(%{})
-    end
-
-    test "when wallet_id is not a valid uuid", %{
-      invalid_uuid: invalid_uuid,
-      blockchain: %{id: blockchain_id}
-    } do
-      {:error,
-       %Changeset{
-         errors: [
-           {:wallet_id, {"wallet_id must be a uuid", _detail}}
-           | _tail
-         ]
-       }} =
-        BlockchainTxs.create(%{
-          wallet_id: invalid_uuid,
-          blockchain_id: blockchain_id
-        })
-    end
-
-    test "when account_id is not a valid uuid", %{
-      invalid_uuid: invalid_uuid,
-      wallet: %{id: wallet_id},
-      blockchain: %{id: blockchain_id}
-    } do
-      {:error,
-       %Changeset{
-         errors: [
-           {:account_id, {"account_id must be a uuid", _detail}}
-           | _tail
-         ]
-       }} =
-        BlockchainTxs.create(%{
-          account_id: invalid_uuid,
-          wallet_id: wallet_id,
-          blockchain_id: blockchain_id
-        })
-    end
-
-    test "when blockchain_id is not a valid uuid", %{
-      wallet: %{id: wallet_id},
-      invalid_uuid: invalid_uuid
-    } do
-      {:error,
-       %Changeset{
-         errors: [
-           {:blockchain_id, {"blockchain_id must be a uuid", _detail}}
-           | _tail
-         ]
-       }} =
-        BlockchainTxs.create(%{
-          wallet_id: wallet_id,
-          blockchain_id: invalid_uuid
-        })
     end
 
     test "when blockchain doesn't exist", %{

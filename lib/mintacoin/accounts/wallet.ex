@@ -16,8 +16,6 @@ defmodule Mintacoin.Wallet do
           blockchain: Blockchain.t()
         }
 
-  @uuid_regex ~r/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/
-
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "wallets" do
     field(:public_key, :string)
@@ -51,8 +49,6 @@ defmodule Mintacoin.Wallet do
       :account_id,
       :blockchain_id
     ])
-    |> validate_format(:account_id, @uuid_regex, message: "account_id must be a uuid")
-    |> validate_format(:blockchain_id, @uuid_regex, message: "blockchain_id must be a uuid")
     |> foreign_key_constraint(:account_id)
     |> foreign_key_constraint(:blockchain_id)
     |> unique_constraint(:public_key)

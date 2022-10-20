@@ -18,7 +18,6 @@ defmodule Mintacoin.Accounts.WalletsTest do
       encrypted_secret_key:
         "oCZIdnWX8ZF6cHJ5CJbdmc5wmDzoLoXi+SnwQYzHv3GtmDwqc/ATx4MktFMo3lzGLaCwanD084dHyvGaQQlNOkcqss3Hgr8gxsb64xk+Gyc",
       secret_key: "MKMO5J4VQDIPTQ52FUC2DZN4DTFM4L3TCLQFND64CSTKJADR4GGQ",
-      invalid_uuid: "INVALID-UUID",
       not_existing_uuid: "d9cb83d6-05f5-4557-b5d0-9e1728c42091"
     }
   end
@@ -69,48 +68,6 @@ defmodule Mintacoin.Accounts.WalletsTest do
            blockchain_id: {"can't be blank", _}
          ]
        }} = Wallets.create(%{})
-    end
-
-    test "when account_id is not a uuid", %{
-      public_key: public_key,
-      encrypted_secret_key: encrypted_secret_key,
-      invalid_uuid: invalid_account_id,
-      blockchain_id: blockchain_id
-    } do
-      {:error,
-       %Changeset{
-         errors: [
-           {:account_id, {"account_id must be a uuid", _detail}}
-           | _tail
-         ]
-       }} =
-        Wallets.create(%{
-          public_key: public_key,
-          encrypted_secret_key: encrypted_secret_key,
-          account_id: invalid_account_id,
-          blockchain_id: blockchain_id
-        })
-    end
-
-    test "when blockchain_id is not a uuid", %{
-      public_key: public_key,
-      encrypted_secret_key: encrypted_secret_key,
-      account_id: account_id,
-      invalid_uuid: invalid_blockchain_id
-    } do
-      {:error,
-       %Changeset{
-         errors: [
-           {:blockchain_id, {"blockchain_id must be a uuid", _detail}}
-           | _tail
-         ]
-       }} =
-        Wallets.create(%{
-          public_key: public_key,
-          encrypted_secret_key: encrypted_secret_key,
-          account_id: account_id,
-          blockchain_id: invalid_blockchain_id
-        })
     end
 
     test "when account_id doesn't exist", %{

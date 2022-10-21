@@ -51,9 +51,11 @@ defmodule Mintacoin.Assets.StellarMock do
 
   @impl true
   def create_trustline(_opts) do
+    default_status = Enum.random([true, false])
+
     {:ok,
      %Mintacoin.Assets.Crypto.AssetResponse{
-       successful: Enum.random([true, false]),
+       successful: Application.get_env(:stellar_mock, :tx_status, default_status),
        tx_id: "22eb025e2281b2e35b2bd51bc5a3a102e8129b56dd1fc52145c0ce20dfcfe6c0",
        tx_hash: "22eb025e2281b2e35b2bd51bc5a3a102e8129b56dd1fc52145c0ce20dfcfe6c0",
        tx_timestamp: "2022-09-28 15:06:04Z",

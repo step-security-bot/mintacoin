@@ -4,20 +4,40 @@ defmodule Mintacoin.Accounts do
   """
 
   alias Ecto.{Changeset, UUID}
-  alias Mintacoin.{Account, Accounts.Cipher, Accounts.Keypair, Blockchain, Repo}
+
+  alias Mintacoin.{
+    Account,
+    Accounts.Cipher,
+    Accounts.Keypair,
+    Asset,
+    AssetHolder,
+    AssetHolders,
+    Blockchain,
+    Repo,
+    Wallet
+  }
+
   alias Mintacoin.Accounts.Workers.CreateAccount, as: CreateAccountWorker
+  alias Mintacoin.Accounts.Workers.CreateTrustline, as: CreateTrustlineWorker
 
   @type id :: UUID.t()
   @type address :: String.t()
   @type seed_words :: String.t()
   @type signature :: String.t() | nil
   @type account :: Account.t() | nil
+  @type asset :: Asset.t()
+  @type asset_holder :: AssetHolder.t()
+  @type asset_code :: String.t()
+  @type params :: map()
+  @type wallet :: Wallet.t()
+  @type encrypted_key :: String.t()
   @type error ::
           Changeset.t()
           | :decoding_error
           | :invalid_address
           | :invalid_seed_words
           | :encryption_error
+          | :asset_not_found
 
   @spec create(Mintacoin.Blockchain.t()) :: {:ok, Account.t()} | {:error, error()}
   def create(%Blockchain{id: blockchain_id}) do
@@ -44,6 +64,24 @@ defmodule Mintacoin.Accounts do
     |> Repo.insert()
   end
 
+  @spec create_trustline(params :: params()) :: {:ok, asset_holder()} | {:error, error()}
+  def create_trustline(%{
+        asset: %{id: asset_id, code: code},
+        trustor_wallet: %Wallet{id: trustor_wallet_id} = trustor_wallet,
+        signature: signature
+      }) do
+    case system_encrypt_secret_key(trustor_wallet, signature) do
+      {:ok, encrypted_secret_key} ->
+        trustor_wallet_id
+        |> AssetHolders.retrieve_by_wallet_id_and_asset_id(asset_id)
+        |> process_trustor(asset_id, trustor_wallet)
+        |> dispatch_create_trustline_job(encrypted_secret_key, code)
+
+      {:error, error} ->
+        {:error, error}
+    end
+  end
+
   @spec retrieve_by_id(id :: id()) :: {:ok, account()}
   def retrieve_by_id(id), do: {:ok, Repo.get(Account, id)}
 
@@ -61,5 +99,61 @@ defmodule Mintacoin.Accounts do
       {:ok, nil} -> {:error, :invalid_address}
       error -> error
     end
+  end
+
+  @spec system_encrypt_secret_key(
+          wallet :: wallet(),
+          signature :: signature()
+        ) :: {:ok, encrypted_key()} | {:error, error()}
+  defp system_encrypt_secret_key(
+         %{encrypted_secret_key: encrypted_secret_key},
+         signature
+       ) do
+    with {:ok, secret_key} <- Cipher.decrypt(encrypted_secret_key, signature) do
+      Cipher.encrypt_with_system_key(secret_key)
+    end
+  end
+
+  @spec process_trustor(
+          asset_holder :: {:ok, asset_holder() | nil},
+          asset_id :: id(),
+          trustor_wallet :: wallet()
+        ) :: {:ok, asset_holder()} | {:error, error()}
+  defp process_trustor({:ok, nil}, asset_id, %Wallet{
+         id: wallet_id,
+         account_id: account_id,
+         blockchain_id: blockchain_id
+       }) do
+    AssetHolders.create(%{
+      blockchain_id: blockchain_id,
+      account_id: account_id,
+      asset_id: asset_id,
+      wallet_id: wallet_id,
+      is_minter: false
+    })
+  end
+
+  defp process_trustor({:ok, %AssetHolder{} = asset_holder}, _asset_id, _wallet),
+    do: {:ok, asset_holder}
+
+  @spec dispatch_create_trustline_job(
+          asset_holder :: {:ok, asset_holder()},
+          encrypted_secret_key :: encrypted_key(),
+          asset_code :: asset_code()
+        ) :: {:ok, asset_holder()} | {:error, error()}
+  defp dispatch_create_trustline_job(
+         {:ok, %AssetHolder{id: asset_holder_id} = asset_holder},
+         encrypted_secret_key,
+         asset_code
+       ) do
+    %{
+      asset_holder_id: asset_holder_id,
+      encrypted_secret_key: encrypted_secret_key,
+      asset_code: asset_code
+    }
+    |> CreateTrustlineWorker.new()
+    |> Oban.insert()
+
+    {:ok, asset_holder}
   end
 end

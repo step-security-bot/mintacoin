@@ -124,8 +124,8 @@ defmodule Mintacoin.Accounts.WalletsTest do
       new_public_key: new_public_key,
       new_encrypted_secret_key: new_encrypted_secret_key,
       new_secret_key: new_secret_key,
-      account_id: account_id,
-      new_blockchain_id: new_blockchain_id
+      account: %{id: account_id},
+      new_blockchain: %{id: new_blockchain_id}
     } do
       {:ok,
        %Wallet{
@@ -148,8 +148,8 @@ defmodule Mintacoin.Accounts.WalletsTest do
       new_public_key: new_public_key,
       new_encrypted_secret_key: new_encrypted_secret_key,
       new_secret_key: new_secret_key,
-      account_id: account_id,
-      blockchain_id: blockchain_id
+      account: %{id: account_id},
+      blockchain: %{id: blockchain_id}
     } do
       {:error,
        %Changeset{
@@ -171,8 +171,8 @@ defmodule Mintacoin.Accounts.WalletsTest do
       public_key: public_key,
       new_encrypted_secret_key: new_encrypted_secret_key,
       new_secret_key: new_secret_key,
-      new_account_id: new_account_id,
-      blockchain_id: blockchain_id
+      new_account: %{id: new_account_id},
+      blockchain: %{id: blockchain_id}
     } do
       {:error,
        %Changeset{
@@ -194,7 +194,7 @@ defmodule Mintacoin.Accounts.WalletsTest do
   describe "retrieve_by_id/1" do
     setup [:create_wallet]
 
-    test "when wallet exist", %{wallet_id: wallet_id} do
+    test "when wallet exist", %{wallet: %{id: wallet_id}} do
       {:ok, %Wallet{id: ^wallet_id}} = Wallets.retrieve_by_id(wallet_id)
     end
 
@@ -219,9 +219,9 @@ defmodule Mintacoin.Accounts.WalletsTest do
     setup [:create_wallet]
 
     test "when wallet exist", %{
-      wallet_id: wallet_id,
-      account_id: account_id,
-      blockchain_id: blockchain_id
+      wallet: %{id: wallet_id},
+      account: %{id: account_id},
+      blockchain: %{id: blockchain_id}
     } do
       {:ok, %Wallet{id: ^wallet_id}} =
         Wallets.retrieve_by_account_id_and_blockchain_id(account_id, blockchain_id)
@@ -229,7 +229,7 @@ defmodule Mintacoin.Accounts.WalletsTest do
 
     test "when account_id doesn't exist", %{
       not_existing_uuid: not_existing_uuid,
-      blockchain_id: blockchain_id
+      blockchain: %{id: blockchain_id}
     } do
       {:ok, nil} =
         Wallets.retrieve_by_account_id_and_blockchain_id(not_existing_uuid, blockchain_id)
@@ -237,30 +237,55 @@ defmodule Mintacoin.Accounts.WalletsTest do
 
     test "when blockchain_id doesn't exist", %{
       not_existing_uuid: not_existing_uuid,
-      account_id: account_id
+      account: %{id: account_id}
     } do
       {:ok, nil} = Wallets.retrieve_by_account_id_and_blockchain_id(account_id, not_existing_uuid)
     end
   end
 
-  defp create_wallet(%{public_key: public_key}) do
-    %Wallet{id: wallet_id, blockchain_id: blockchain_id, account_id: account_id} =
-      insert(:wallet, %{public_key: public_key})
+  describe "retrieve_by_account_address_and_blockchain_id/2" do
+    setup [:create_wallet]
 
-    %{wallet_id: wallet_id, blockchain_id: blockchain_id, account_id: account_id}
+    test "when wallet exist", %{
+      wallet: %{id: wallet_id},
+      account: %{address: address},
+      blockchain: %{id: blockchain_id}
+    } do
+      {:ok, %Wallet{id: ^wallet_id}} =
+        Wallets.retrieve_by_account_address_and_blockchain_id(address, blockchain_id)
+    end
+
+    test "when address doesn't exist", %{blockchain: %{id: blockchain_id}} do
+      {:ok, nil} = Wallets.retrieve_by_account_address_and_blockchain_id("address", blockchain_id)
+    end
+
+    test "when blockchain_id doesn't exist", %{
+      not_existing_uuid: not_existing_uuid,
+      account: %{address: address}
+    } do
+      {:ok, nil} =
+        Wallets.retrieve_by_account_address_and_blockchain_id(address, not_existing_uuid)
+    end
+  end
+
+  defp create_wallet(%{public_key: public_key}) do
+    %Wallet{blockchain: blockchain, account: account} =
+      wallet = insert(:wallet, %{public_key: public_key})
+
+    %{wallet: wallet, blockchain: blockchain, account: account}
   end
 
   defp new_params(_context) do
-    %Account{id: account_id} = insert(:account)
-    %Blockchain{id: blockchain_id} = insert(:blockchain, %{name: "stellar", network: "mainnet"})
+    account = insert(:account)
+    blockchain = insert(:blockchain, %{name: "stellar", network: "mainnet"})
 
     %{
       new_public_key: "GZUFMBN4LYBYQSMSS7FOR6LYYB5HU4VAIK3ZXSNBCRMB6F7N45WA",
       new_encrypted_secret_key:
         "x+evrxdb3OnVPtPi2E4XXAC66xUIaxId4aqQkxWqntE2A09qZB+aNpRvKvXlUcvvpOW3J6ttwO4GS97eLeZlZMgqB2WuhdLJrrQXYwV6sS8",
       new_secret_key: "AS5PII43PD7WYSXABMUBDHIJHMPJGWGNGI62VO7UJQOCRKB3UYNQ",
-      new_account_id: account_id,
-      new_blockchain_id: blockchain_id
+      new_account: account,
+      new_blockchain: blockchain
     }
   end
 end

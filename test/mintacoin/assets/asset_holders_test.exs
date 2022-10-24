@@ -250,4 +250,17 @@ defmodule Mintacoin.Assets.AssetHoldersTest do
       {:ok, nil} = AssetHolders.retrieve_minter_by_wallet_id_and_asset_code(wallet_id, "MTK")
     end
   end
+
+  describe "retrieve_minter_by_asset_id/1" do
+    test "when asset exists", %{
+      asset_holder: %{id: asset_holder_id, asset: %{id: asset_id}}
+    } do
+      {:ok, %AssetHolder{id: ^asset_holder_id}} =
+        AssetHolders.retrieve_minter_by_asset_id(asset_id)
+    end
+
+    test "when asset does not exists", %{not_existing_uuid: not_existing_uuid} do
+      {:ok, nil} = AssetHolders.retrieve_minter_by_asset_id(not_existing_uuid)
+    end
+  end
 end

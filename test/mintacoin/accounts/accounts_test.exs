@@ -112,6 +112,28 @@ defmodule Mintacoin.Accounts.AccountsTest do
     end
   end
 
+  describe "retrieve_accounts_by_asset_id/1" do
+    setup do
+      %{account: account, asset: asset} = asset_holder = insert(:asset_holder)
+
+      %{
+        not_existing_asset_id: "438d075c-2b66-4841-bf92-2c9f346e16fa",
+        asset: asset,
+        asset_holder: asset_holder,
+        account: account
+      }
+    end
+
+    test "when asset id exist", %{asset: %{id: asset_id}, account: %{id: account_id}} do
+      {:ok, [%Account{id: ^account_id} | _tail]} =
+        Accounts.retrieve_accounts_by_asset_id(asset_id)
+    end
+
+    test "when asset id doesn't exist", %{not_existing_asset_id: not_existing_asset_id} do
+      {:ok, []} = Accounts.retrieve_accounts_by_asset_id(not_existing_asset_id)
+    end
+  end
+
   describe "create_trustline/1" do
     setup [:successful_transaction, :create_asset, :create_trustor, :create_trustline]
 

@@ -50,4 +50,14 @@ defmodule Mintacoin.AssetHolders do
 
     {:ok, Repo.one(query)}
   end
+
+  @spec retrieve_minter_by_asset_id(asset_id :: id()) :: {:ok, asset_holder()}
+  def retrieve_minter_by_asset_id(asset_id) do
+    asset_holder =
+      AssetHolder
+      |> Repo.get_by(asset_id: asset_id, is_minter: true)
+      |> Repo.preload(:account)
+
+    {:ok, asset_holder}
+  end
 end

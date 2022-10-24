@@ -2,6 +2,7 @@ defmodule Mintacoin.Accounts do
   @moduledoc """
   This module is the responsible for the CRUD operations for accounts and also for the aggregate operations within the accounts context.
   """
+  import Ecto.Query
 
   alias Ecto.{Changeset, UUID}
 
@@ -31,6 +32,7 @@ defmodule Mintacoin.Accounts do
   @type params :: map()
   @type wallet :: Wallet.t()
   @type encrypted_key :: String.t()
+  @type accounts :: list(Account.t()) | []
   @type error ::
           Changeset.t()
           | :decoding_error
@@ -99,6 +101,18 @@ defmodule Mintacoin.Accounts do
       {:ok, nil} -> {:error, :invalid_address}
       error -> error
     end
+  end
+
+  @spec retrieve_accounts_by_asset_id(asset_id :: id()) :: {:ok, accounts()}
+  def retrieve_accounts_by_asset_id(asset_id) do
+    query =
+      from(account in Account,
+        join: asset_holder in AssetHolder,
+        on: account.id == asset_holder.account_id,
+        where: asset_holder.asset_id == ^asset_id
+      )
+
+    {:ok, Repo.all(query)}
   end
 
   @spec system_encrypt_secret_key(

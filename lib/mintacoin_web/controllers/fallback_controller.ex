@@ -19,7 +19,7 @@ defmodule MintacoinWeb.FallbackController do
   @spec call(conn :: conn(), {:error, error()}) :: conn()
   def call(conn, {:error, %Changeset{} = changeset}) do
     conn
-    |> put_status(:unprocessable_entity)
+    |> put_status(:bad_request)
     |> put_view(ChangesetView)
     |> render("error.json", changeset: changeset)
   end

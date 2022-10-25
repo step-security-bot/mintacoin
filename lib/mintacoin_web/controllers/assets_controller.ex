@@ -38,9 +38,12 @@ defmodule MintacoinWeb.AssetsController do
   @type network :: :testnet | :mainnet
   @type error ::
           :blockchain_not_found
-          | :asset_not_found
-          | :account_not_found
+          | :invalid_supply_format
+          | :decoding_error
           | :bad_request
+          | :asset_not_found
+          | :encryption_error
+          | :wallet_not_found
           | Changeset.t()
 
   action_fallback MintacoinWeb.FallbackController

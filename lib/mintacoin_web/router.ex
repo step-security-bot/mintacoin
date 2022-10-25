@@ -12,6 +12,8 @@ defmodule MintacoinWeb.Router do
 
     resources "/accounts", AccountsController, param: "address", except: [:index, :show]
     post "/accounts/:address/recover", AccountsController, :recover
+    post "/accounts/:address/assets/:asset_id/trust", AccountsController, :create_trustline
+    get "/accounts/:address/assets", AccountsController, :show_assets
 
     resources "/assets", AssetsController, except: [:index]
     get "/assets/:id/issuer", AssetsController, :show_issuer

@@ -5,13 +5,14 @@ defmodule Mintacoin.AssetHolders do
   import Ecto.Query
 
   alias Ecto.{Changeset, UUID}
-  alias Mintacoin.{Asset, AssetHolder, Repo, Wallets}
+  alias Mintacoin.{Asset, AssetHolder, Balance, Repo, Wallets}
 
   @type id :: UUID.t()
   @type changes :: map()
   @type error :: Changeset.t()
   @type asset_holder :: AssetHolder.t() | nil
   @type asset_code :: String.t()
+  @type balance :: Balance.t()
 
   @spec create(changes :: changes()) :: {:ok, asset_holder()} | {:error, error()}
   def create(changes) do
@@ -56,8 +57,25 @@ defmodule Mintacoin.AssetHolders do
     asset_holder =
       AssetHolder
       |> Repo.get_by(asset_id: asset_id, is_minter: true)
-      |> Repo.preload(:account)
+      |> Repo.preload([:account, :asset])
 
     {:ok, asset_holder}
+  end
+
+  @spec retrieve_by_account_id(account_id :: id()) ::
+          {:ok, list({asset_holder(), balance()}) | []}
+  def retrieve_by_account_id(account_id) do
+    query =
+      from(asset_holder in AssetHolder,
+        join: balance in Balance,
+        on:
+          asset_holder.wallet_id == balance.wallet_id and
+            asset_holder.asset_id == balance.asset_id,
+        where: asset_holder.account_id == ^account_id,
+        preload: [:asset, :blockchain],
+        select: {asset_holder, balance}
+      )
+
+    {:ok, Repo.all(query)}
   end
 end

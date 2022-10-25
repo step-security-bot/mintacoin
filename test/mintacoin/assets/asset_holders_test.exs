@@ -8,7 +8,7 @@ defmodule Mintacoin.Assets.AssetHoldersTest do
   import Mintacoin.Factory, only: [insert: 1]
 
   alias Ecto.{Adapters.SQL.Sandbox, Changeset}
-  alias Mintacoin.{AssetHolder, AssetHolders}
+  alias Mintacoin.{Account, Asset, AssetHolder, AssetHolders, Balance, Balances, Blockchain}
 
   setup do
     :ok = Sandbox.checkout(Mintacoin.Repo)
@@ -255,12 +255,37 @@ defmodule Mintacoin.Assets.AssetHoldersTest do
     test "when asset exists", %{
       asset_holder: %{id: asset_holder_id, asset: %{id: asset_id}}
     } do
-      {:ok, %AssetHolder{id: ^asset_holder_id}} =
+      {:ok, %AssetHolder{id: ^asset_holder_id, account: %Account{}, asset: %Asset{}}} =
         AssetHolders.retrieve_minter_by_asset_id(asset_id)
     end
 
     test "when asset does not exists", %{not_existing_uuid: not_existing_uuid} do
       {:ok, nil} = AssetHolders.retrieve_minter_by_asset_id(not_existing_uuid)
     end
+  end
+
+  describe "retrieve_by_account_id/1" do
+    setup [:create_balance]
+
+    test "when account_id exists", %{
+      asset_holder: %{id: asset_holder_id, account: %{id: account_id}},
+      balance: %{id: balance_id}
+    } do
+      {:ok,
+       [
+         {%AssetHolder{id: ^asset_holder_id, asset: %Asset{}, blockchain: %Blockchain{}},
+          %Balance{id: ^balance_id}}
+       ]} = AssetHolders.retrieve_by_account_id(account_id)
+    end
+
+    test "when account_id does not exists", %{not_existing_uuid: not_existing_uuid} do
+      {:ok, []} = AssetHolders.retrieve_by_account_id(not_existing_uuid)
+    end
+  end
+
+  defp create_balance(%{asset_holder: %{wallet_id: wallet_id, asset_id: asset_id}}) do
+    {:ok, balance} = Balances.create(%{asset_id: asset_id, wallet_id: wallet_id})
+
+    %{balance: balance}
   end
 end

@@ -14,6 +14,13 @@ defmodule Mintacoin.MixProject do
       dialyzer: [
         plt_add_apps: [:mintacoin, :ex_unit],
         plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
+      ],
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
       ]
     ]
   end
@@ -55,7 +62,8 @@ defmodule Mintacoin.MixProject do
       {:ecto_enum, "~> 1.4"},
       {:oban, "~> 2.13"},
       {:stellar_sdk, "~> 0.10.0"},
-      {:decimal, "~> 2.0"}
+      {:decimal, "~> 2.0"},
+      {:excoveralls, "~> 0.15", only: :test}
     ]
   end
 

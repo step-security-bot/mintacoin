@@ -5,46 +5,92 @@ defmodule Mintacoin.Accounts.Stellar do
 
   alias Mintacoin.Accounts.Crypto.AccountResponse
   alias Stellar.{Horizon, Horizon.Transaction, KeyPair, TxBuild}
+  alias Stellar.TxBuild.{CreateAccount, SequenceNumber, Signature}
 
-  @type status :: :ok | :error
-  @type stellar_response :: map()
+  @type create_account :: CreateAccount.t()
+  @type envelope :: String.t()
+  @type error :: {:error, any()}
+  @type funder_account_information :: map()
+  @type key_pair :: {public_key(), secret_key()}
+  @type impl_response :: {:ok, AccountResponse.t()} | error()
   @type public_key :: String.t()
   @type secret_key :: String.t()
-  @type error :: {:error, any()}
+  @type sequence_number :: SequenceNumber.t()
+  @type signature :: Signature.t()
+  @type status :: :ok | :error
+  @type stellar_response :: map()
+  @type tx_envelope :: {:ok, envelope()} | {:error, atom()}
 
   @behaviour Mintacoin.Accounts.Crypto.Spec
 
   @impl true
   def create_account(_opts) do
-    {fund_public_key, _fund_private_key} = fund_keypair = fund_key_pair_from_system()
     {public_key, secret_key} = KeyPair.random()
 
-    source_account = TxBuild.Account.new(fund_public_key)
-    {:ok, seq_num} = Horizon.Accounts.fetch_next_sequence_number(fund_public_key)
-    sequence_number = TxBuild.SequenceNumber.new(seq_num)
+    %{funder_public_key: funder_public_key, funder_signature: funder_signature} =
+      funder_account_information()
 
-    operation =
-      TxBuild.CreateAccount.new(
-        destination: public_key,
-        starting_balance: 1
-      )
+    public_key
+    |> build_create_account_operation()
+    |> build_envelope(funder_public_key, funder_signature)
+    |> execute_transaction(public_key, secret_key)
+  end
 
-    signature = TxBuild.Signature.new(fund_keypair)
+  @spec funder_account_information() :: funder_account_information()
+  defp funder_account_information do
+    {funder_public_key, _fund_private_key} = funder_keypair = funder_key_pair_from_system()
+    funder_signature = Signature.new(funder_keypair)
 
-    {:ok, envelope} =
-      source_account
-      |> TxBuild.new(sequence_number: sequence_number)
-      |> TxBuild.add_operation(operation)
-      |> TxBuild.sign(signature)
-      |> TxBuild.envelope()
+    %{funder_public_key: funder_public_key, funder_signature: funder_signature}
+  end
 
+  @spec build_create_account_operation(destination :: public_key(), starting_balance :: integer()) ::
+          create_account()
+  defp build_create_account_operation(destination, starting_balance \\ 1) do
+    CreateAccount.new(
+      destination: destination,
+      starting_balance: starting_balance
+    )
+  end
+
+  @spec build_envelope(
+          operation :: create_account(),
+          funder_public_key :: public_key(),
+          signature :: signature()
+        ) ::
+          tx_envelope()
+  defp build_envelope(operation, funder_public_key, signature) do
+    sequence_number = get_sequence_number(funder_public_key)
+
+    funder_public_key
+    |> TxBuild.Account.new()
+    |> TxBuild.new(sequence_number: sequence_number)
+    |> TxBuild.add_operation(operation)
+    |> TxBuild.sign(signature)
+    |> TxBuild.envelope()
+  end
+
+  @spec get_sequence_number(funder_public_key :: public_key()) ::
+          sequence_number()
+  defp get_sequence_number(funder_public_key) do
+    {:ok, sequence} = Horizon.Accounts.fetch_next_sequence_number(funder_public_key)
+    SequenceNumber.new(sequence)
+  end
+
+  @spec execute_transaction(
+          tx_envelope :: tx_envelope(),
+          public_key :: public_key(),
+          secret_key :: secret_key()
+        ) ::
+          impl_response()
+  defp execute_transaction({:ok, envelope}, public_key, secret_key) do
     envelope
     |> Horizon.Transactions.create()
     |> format_response(public_key, secret_key)
   end
 
-  @spec fund_key_pair_from_system() :: {public_key(), secret_key()}
-  defp fund_key_pair_from_system do
+  @spec funder_key_pair_from_system() :: key_pair()
+  defp funder_key_pair_from_system do
     Application.get_env(:mintacoin, :stellar_fund_secret_key, nil)
     |> KeyPair.from_secret_seed()
   end
@@ -53,7 +99,7 @@ defmodule Mintacoin.Accounts.Stellar do
           {status(), stellar_response()},
           public_key :: secret_key(),
           secret_key :: secret_key()
-        ) :: {:ok, AccountResponse.t()} | error()
+        ) :: impl_response()
   defp format_response(
          {:ok,
           %Transaction{id: id, successful: successful, hash: hash, created_at: created_at} =

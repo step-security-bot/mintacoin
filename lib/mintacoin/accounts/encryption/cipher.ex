@@ -32,9 +32,9 @@ defmodule Mintacoin.Accounts.Cipher do
           {:ok, payload()} | {:error, error()}
   def decrypt(ciphertext, key) do
     with {:ok, key} <- Base.decode32(key, padding: false),
-         {:ok, <<iv::binary-16, ciphertext::binary>>} <- Base.decode64(ciphertext, padding: false) do
-      {:ok, {_block_size, cipher}} = detect_encryption_mode(key)
-
+         {:ok, <<iv::binary-16, ciphertext::binary>>} <-
+           Base.decode64(ciphertext, padding: false),
+         {:ok, {_block_size, cipher}} <- detect_encryption_mode(key) do
       plaintext =
         cipher
         |> :crypto.crypto_one_time(key, iv, ciphertext, false)
@@ -77,13 +77,10 @@ defmodule Mintacoin.Accounts.Cipher do
   @spec detect_encryption_mode(key :: binary()) ::
           {:ok, {block_size :: integer(), cipher :: atom()}}
   defp detect_encryption_mode(key) do
-    cipher =
-      case block_size = byte_size(key) do
-        16 -> :aes_128_cbc
-        32 -> :aes_256_cbc
-        _ -> raise "invalid secret key size"
-      end
-
-    {:ok, {block_size, cipher}}
+    case block_size = byte_size(key) do
+      16 -> {:ok, {block_size, :aes_128_cbc}}
+      32 -> {:ok, {block_size, :aes_256_cbc}}
+      _ -> {:error, :invalid_key_size}
+    end
   end
 end

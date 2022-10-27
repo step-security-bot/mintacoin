@@ -5,10 +5,9 @@ defmodule Mintacoin.BlockchainTxs do
   import Ecto.Query
 
   alias Ecto.{Changeset, UUID}
-  alias Mintacoin.{BlockchainTx, Repo, Wallet}
+  alias Mintacoin.{BlockchainTx, Repo}
 
   @type id :: UUID.t()
-  @type wallet_id :: Wallet.t()
   @type tx_id :: String.t()
   @type changes :: map()
   @type blockchain_tx :: BlockchainTx.t() | nil
@@ -41,9 +40,21 @@ defmodule Mintacoin.BlockchainTxs do
     {:ok, Repo.all(query)}
   end
 
-  @spec retrieve_by_wallet_id(wallet_id :: wallet_id()) :: {:ok, list(blockchain_tx())}
+  @spec retrieve_by_wallet_id(wallet_id :: id()) :: {:ok, list(blockchain_tx())}
   def retrieve_by_wallet_id(wallet_id) do
     query = from(btx in BlockchainTx, where: btx.wallet_id == ^wallet_id)
+    {:ok, Repo.all(query)}
+  end
+
+  @spec retrieve_by_asset_id(asset_id :: id()) :: {:ok, list(blockchain_tx())}
+  def retrieve_by_asset_id(asset_id) do
+    query = from(btx in BlockchainTx, where: btx.asset_id == ^asset_id)
+    {:ok, Repo.all(query)}
+  end
+
+  @spec retrieve_by_asset_holder_id(asset_holder_id :: id()) :: {:ok, list(blockchain_tx())}
+  def retrieve_by_asset_holder_id(asset_holder_id) do
+    query = from(btx in BlockchainTx, where: btx.asset_holder_id == ^asset_holder_id)
     {:ok, Repo.all(query)}
   end
 end

@@ -4,7 +4,7 @@ defmodule Mintacoin.MixProject do
   def project do
     [
       app: :mintacoin,
-      version: "0.2.2",
+      version: "0.3.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
@@ -14,6 +14,13 @@ defmodule Mintacoin.MixProject do
       dialyzer: [
         plt_add_apps: [:mintacoin, :ex_unit],
         plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
+      ],
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
       ]
     ]
   end
@@ -54,7 +61,9 @@ defmodule Mintacoin.MixProject do
       {:ex_machina, "~> 2.7", only: :test},
       {:ecto_enum, "~> 1.4"},
       {:oban, "~> 2.13"},
-      {:stellar_sdk, "~> 0.10.0"}
+      {:stellar_sdk, "~> 0.10.0"},
+      {:decimal, "~> 2.0"},
+      {:excoveralls, "~> 0.15", only: :test}
     ]
   end
 

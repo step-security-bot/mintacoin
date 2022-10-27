@@ -7,7 +7,7 @@ defmodule Mintacoin.Wallet do
   import Ecto.Changeset
 
   alias Ecto.Changeset
-  alias Mintacoin.{Account, Blockchain, BlockchainTx}
+  alias Mintacoin.{Account, AssetHolder, Balance, Blockchain, BlockchainTx}
 
   @type t :: %__MODULE__{
           public_key: String.t(),
@@ -15,8 +15,6 @@ defmodule Mintacoin.Wallet do
           account: Account.t(),
           blockchain: Blockchain.t()
         }
-
-  @uuid_regex ~r/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "wallets" do
@@ -28,6 +26,8 @@ defmodule Mintacoin.Wallet do
     belongs_to(:blockchain, Blockchain, type: :binary_id)
 
     has_many(:blockchain_txs, BlockchainTx)
+    has_many(:asset_holders, AssetHolder)
+    has_many(:balances, Balance)
 
     timestamps()
   end
@@ -49,8 +49,6 @@ defmodule Mintacoin.Wallet do
       :account_id,
       :blockchain_id
     ])
-    |> validate_format(:account_id, @uuid_regex, message: "account_id must be a uuid")
-    |> validate_format(:blockchain_id, @uuid_regex, message: "blockchain_id must be a uuid")
     |> foreign_key_constraint(:account_id)
     |> foreign_key_constraint(:blockchain_id)
     |> unique_constraint(:public_key)

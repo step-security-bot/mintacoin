@@ -13,6 +13,8 @@ defmodule Mintacoin.BlockchainTxFactory do
         account = Map.get(attrs, :account, insert(:account))
         blockchain = Map.get(attrs, :blockchain, insert(:blockchain))
         wallet = Map.get(attrs, :wallet, insert(:wallet, blockchain: blockchain))
+        asset = Map.get(attrs, :asset, insert(:asset))
+        asset_holder = Map.get(attrs, :asset_holder, insert(:asset_holder))
         successful = Map.get(attrs, :successful, false)
         tx_timestamp = Map.get(attrs, :tx_timestamp, sequence(:tx_timestamp, &"123456789#{&1}"))
         tx_response = Map.get(attrs, :tx_response, %{})
@@ -42,6 +44,8 @@ defmodule Mintacoin.BlockchainTxFactory do
           account: account,
           blockchain: blockchain,
           wallet: wallet,
+          asset: asset,
+          asset_holder: asset_holder,
           successful: successful,
           tx_id: tx_id,
           tx_hash: tx_hash,

@@ -18,5 +18,5 @@ defmodule Mintacoin.Accounts.Crypto do
   end
 
   @spec impl(blockchain :: blockchain()) :: impl()
-  defp impl("stellar"), do: Application.get_env(:mintacoin, :stellar_impl, Stellar)
+  defp impl("stellar"), do: Application.get_env(:mintacoin, :crypto_impl, Stellar)
 end

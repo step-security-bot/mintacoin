@@ -29,9 +29,6 @@ config :phoenix, :plug_init_mode, :runtime
 # Oban test configuration
 config :mintacoin, Oban, testing: :inline
 
-# Crypto implementations envs
-config :mintacoin, stellar_impl: Mintacoin.Accounts.StellarMock
-
 # Encryption variables for accounts signatures
 config :mintacoin, encryption_variable: "HQHSCWQ4HNBMLFUWHU2S7H3KGU"
 

@@ -4,7 +4,15 @@ defmodule Mintacoin.Accounts.CryptoTest do
   """
   use Mintacoin.DataCase, async: false
 
-  alias Mintacoin.Accounts.{Crypto, Crypto.AccountResponse}
+  alias Mintacoin.Accounts.{Crypto, Crypto.AccountResponse, StellarMock}
+
+  setup do
+    Application.put_env(:mintacoin, :crypto_impl, StellarMock)
+
+    on_exit(fn ->
+      Application.delete_env(:mintacoin, :crypto_impl)
+    end)
+  end
 
   describe "create_account/1" do
     test "with the stellar blockchain" do

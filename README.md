@@ -1,6 +1,9 @@
 <div align="center">
   <h1>Mintacoin</h1>
   <!-- Badges -->
+  <a href="https://docs.mintacoin.co">
+    <img src="https://img.shields.io/badge/docs-docs.mintacoin.co-blue" alt="Mintacoin Documentation">
+  </a>
   <img src="https://img.shields.io/github/workflow/status/kommitters/mintacoin/Mintacoin%20CI/main" alt="Build Status">
   <a href="https://coveralls.io/github/kommitters/mintacoin">
     <img src="https://coveralls.io/repos/github/kommitters/mintacoin/badge.svg" alt="Coverage Status">
@@ -111,6 +114,14 @@ For more information on how to contribute, please refer to our [CONTRIBUTING][co
 
 This library is licensed under an MIT license. See [LICENSE][license] for details.
 
+## Credits
+
+Special thanks to the third party tools used in this project.
+
+[<img src="https://user-images.githubusercontent.com/39246879/198380259-b9615598-0dd2-4a35-9402-c7ac2896fa53.svg"  width="250" height="100">][gitbook]
+
+[GitBook][gitbook] is the sponsor platform for the publishing of our documentation.
+
 ## Acknowledgements
 
 Made with 💙 by [kommitters Open Source](https://kommit.co)
@@ -126,3 +137,4 @@ Made with 💙 by [kommitters Open Source](https://kommit.co)
 [coc]: https://github.com/kommitters/mintacoin/blob/main/CODE_OF_CONDUCT.md
 [contributing]: https://github.com/kommitters/mintacoin/blob/main/CONTRIBUTING.md
 [license]: https://github.com/kommitters/mintacoin/blob/main/LICENSE
+[gitbook]: https://www.gitbook.com/

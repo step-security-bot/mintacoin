@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.1 (27.10.2022)
+* Bump ossf/scorecard-action to v2.0.6.
+
 ## 0.3.0 (27.10.2022)
 * Add asset and asset_holder tables and database functions.
 * Add balance table for wallets.

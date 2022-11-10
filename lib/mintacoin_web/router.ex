@@ -8,8 +8,13 @@ defmodule MintacoinWeb.Router do
   end
 
   scope "/", MintacoinWeb do
+    get "/", HomeController, :index
+  end
+
+  scope "/v1-alpha", MintacoinWeb do
     pipe_through :api
 
+    get "/", HomeController, :index
     resources "/accounts", AccountsController, param: "address", except: [:index, :show]
     post "/accounts/:address/recover", AccountsController, :recover
     post "/accounts/:address/assets/:asset_id/trust", AccountsController, :create_trustline

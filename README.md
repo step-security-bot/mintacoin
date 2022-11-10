@@ -70,9 +70,9 @@ Here we will show up the Mintacoin's setup for development purposes, follow the 
 
 #### Setting up
 
-1. Install dependencies with `mix deps.get`.
+1. Mintacoin requires a development configuration file. Copy the example with the `cp config/dev.exs.example config/dev.exs`.
 
-2. Mintacoin requires a development configuration file. Copy the example with the `cp config/dev.exs.example config/dev.exs`.
+2. Install dependencies with `mix deps.get`.
 
 3. Within the file `dev.exs` replace the following variables:
 

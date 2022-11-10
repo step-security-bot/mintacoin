@@ -16,6 +16,9 @@ defmodule MintacoinWeb.Plugs.VerifyApiToken do
   def init(default), do: default
 
   @impl true
+  def call(%{path_info: ["v1-alpha"]} = conn, _opts), do: conn
+
+  @impl true
   def call(conn, _default) do
     basic_token = get_token(conn)
     valid_token = Application.get_env(:mintacoin, :api_token)

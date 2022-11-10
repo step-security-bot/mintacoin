@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.2 (10.11.2022)
+* Add API versioning for version `v1-alpha`.
+* Add welcome message for API home.
+
 ## 0.3.1 (28.10.2022)
 * Bump ossf/scorecard-action to v2.0.6.
 

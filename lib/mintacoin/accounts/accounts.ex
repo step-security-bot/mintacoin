@@ -10,7 +10,6 @@ defmodule Mintacoin.Accounts do
     Account,
     Accounts.Cipher,
     Accounts.Keypair,
-    Asset,
     AssetHolder,
     AssetHolders,
     Blockchain,
@@ -26,7 +25,6 @@ defmodule Mintacoin.Accounts do
   @type seed_words :: String.t()
   @type signature :: String.t() | nil
   @type account :: Account.t() | nil
-  @type asset :: Asset.t()
   @type asset_holder :: AssetHolder.t()
   @type asset_code :: String.t()
   @type params :: map()

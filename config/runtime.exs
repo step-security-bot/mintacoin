@@ -74,4 +74,8 @@ if config_env() == :prod do
 
   # For Accounts creation
   config :mintacoin, starting_balance: System.fetch_env!("STARTING_BALANCE")
+
+  # Secret to generate authentication token
+  config :mintacoin, secret_key_base: System.fetch_env!("SECRET_KEY_BASE")
+  config :mintacoin, signing_salt: System.fetch_env!("SIGNING_SALT")
 end

@@ -40,6 +40,10 @@ config :mintacoin, api_token: "API_TOKEN"
 # For Accounts creation
 config :mintacoin, starting_balance: System.get_env("STARTING_BALANCE", "10.0")
 
+# Secret to generate authentication token
+config :mintacoin, secret_key_base: "SECRET_KEY_BASE"
+config :mintacoin, signing_salt: "SIGNING_SALT"
+
 # Stellar SDK configuration
 config :stellar_sdk, network: :test
 

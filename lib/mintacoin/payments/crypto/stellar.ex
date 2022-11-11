@@ -25,7 +25,7 @@ defmodule Mintacoin.Payments.Stellar do
   def create_payment(opts) do
     source_secret_key = Keyword.get(opts, :source_secret_key)
     destination_public_key = Keyword.get(opts, :destination_public_key)
-    amount = Keyword.get(opts, :amount)
+    amount = opts |> Keyword.get(:amount) |> Decimal.new() |> Decimal.to_float()
     asset_code = Keyword.get(opts, :asset_code)
 
     %{

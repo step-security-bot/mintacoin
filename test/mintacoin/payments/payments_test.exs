@@ -3,25 +3,45 @@ defmodule Mintacoin.Payments.PaymentsTest do
   This module is used to group common tests for Payments functions
   """
   use Mintacoin.DataCase, async: false
+  use Oban.Testing, repo: Mintacoin.Repo
 
   import Mintacoin.Factory, only: [insert: 1, insert: 2]
 
   alias Ecto.Adapters.SQL.Sandbox
   alias Ecto.Changeset
   alias Mintacoin.{Payment, Payments}
+  alias Mintacoin.Payments.Workers.CreatePayment, as: CreatePaymentWorker
 
   setup do
     :ok = Sandbox.checkout(Mintacoin.Repo)
 
     blockchain = insert(:blockchain)
     asset = insert(:asset)
-    source_account = insert(:account)
-    destination_account = insert(:account)
     amount = "734.345667"
     status = :processing
     new_status = :completed
     successful = false
     new_successful = true
+
+    %{account: source_account, wallet: source_wallet} =
+      insert(:asset_holder, %{
+        blockchain: blockchain,
+        asset: asset,
+        is_minter: false
+      })
+
+    %{account: destination_account} =
+      insert(:asset_holder, %{
+        blockchain: blockchain,
+        asset: asset,
+        is_minter: false
+      })
+
+    insert(:balance, %{
+      wallet: source_wallet,
+      asset: asset,
+      balance: "10000.0"
+    })
 
     payment =
       insert(:payment, %{source_account: source_account, destination_account: destination_account})
@@ -45,179 +65,141 @@ defmodule Mintacoin.Payments.PaymentsTest do
     test "with valid params", %{
       blockchain: %{id: blockchain_id},
       asset: %{id: asset_id},
-      source_account: %{id: source_account_id},
+      source_account: %{id: source_account_id, signature: source_signature},
       destination_account: %{id: destination_account_id},
       amount: amount,
       status: status,
       successful: successful
     } do
-      {:ok,
-       %Payment{
-         blockchain_id: ^blockchain_id,
-         source_account_id: ^source_account_id,
-         destination_account_id: ^destination_account_id,
-         asset_id: ^asset_id,
-         amount: ^amount,
-         status: ^status,
-         successful: ^successful
-       }} =
-        Payments.create(%{
-          blockchain_id: blockchain_id,
-          source_account_id: source_account_id,
-          destination_account_id: destination_account_id,
-          asset_id: asset_id,
-          amount: amount,
-          status: status,
-          successful: successful
-        })
+      Oban.Testing.with_testing_mode(:manual, fn ->
+        {:ok,
+         %Payment{
+           blockchain_id: ^blockchain_id,
+           source_account_id: ^source_account_id,
+           destination_account_id: ^destination_account_id,
+           asset_id: ^asset_id,
+           amount: ^amount,
+           status: ^status,
+           successful: ^successful
+         }} =
+          Payments.create(%{
+            source_signature: source_signature,
+            source_account_id: source_account_id,
+            destination_account_id: destination_account_id,
+            blockchain_id: blockchain_id,
+            asset_id: asset_id,
+            amount: amount
+          })
+
+        assert_enqueued(
+          worker: CreatePaymentWorker,
+          queue: :create_payment_queue
+        )
+      end)
     end
 
-    test "with missing params" do
-      {:error,
-       %Changeset{
-         errors: [
-           blockchain_id: {"can't be blank", _},
-           source_account_id: {"can't be blank", _},
-           destination_account_id: {"can't be blank", _},
-           asset_id: {"can't be blank", _},
-           amount: {"can't be blank", _},
-           successful: {"can't be blank", _}
-         ]
-       }} = Payments.create(%{})
+    test "when the destination doesn't have a trustline with the asset", %{
+      blockchain: %{id: blockchain_id} = blockchain,
+      asset: %{id: asset_id},
+      source_account: %{id: source_account_id, signature: source_signature}
+    } do
+      %{id: destination_account_id} = account = insert(:account)
+      insert(:wallet, account: account, blockchain: blockchain)
+
+      Oban.Testing.with_testing_mode(:manual, fn ->
+        {:error, :destination_trustline_not_found} =
+          Payments.create(%{
+            source_signature: source_signature,
+            source_account_id: source_account_id,
+            destination_account_id: destination_account_id,
+            blockchain_id: blockchain_id,
+            asset_id: asset_id,
+            amount: "1000"
+          })
+
+        refute_enqueued(
+          worker: CreatePaymentWorker,
+          queue: :create_payment_queue
+        )
+      end)
     end
 
-    test "with invalid status", %{
+    test "when the amount exceeds the source account balance", %{
       blockchain: %{id: blockchain_id},
       asset: %{id: asset_id},
-      source_account: %{id: source_account_id},
-      destination_account: %{id: destination_account_id},
-      amount: amount,
-      successful: successful
+      source_account: %{id: source_account_id, signature: source_signature},
+      destination_account: %{id: destination_account_id}
     } do
-      {:error,
-       %Changeset{
-         errors: [
-           {:status, {"is invalid", _detail}}
-           | _tail
-         ]
-       }} =
-        Payments.create(%{
-          blockchain_id: blockchain_id,
-          source_account_id: source_account_id,
-          destination_account_id: destination_account_id,
-          asset_id: asset_id,
-          amount: amount,
-          status: :invalid,
-          successful: successful
-        })
+      Oban.Testing.with_testing_mode(:manual, fn ->
+        {:error, :insuficient_funds} =
+          Payments.create(%{
+            source_signature: source_signature,
+            source_account_id: source_account_id,
+            destination_account_id: destination_account_id,
+            blockchain_id: blockchain_id,
+            asset_id: asset_id,
+            amount: "20000"
+          })
+
+        refute_enqueued(
+          worker: CreatePaymentWorker,
+          queue: :create_payment_queue
+        )
+      end)
     end
 
-    test "when blockchain_id doesn't exist", %{
-      asset: %{id: asset_id},
-      source_account: %{id: source_account_id},
-      destination_account: %{id: destination_account_id},
-      amount: amount,
-      status: status,
-      successful: successful,
-      not_existing_uuid: not_existing_uuid
+    test "when the source balance doesn't exist", %{
+      blockchain: %{id: blockchain_id} = blockchain,
+      asset: %{id: asset_id} = asset,
+      destination_account: %{id: destination_account_id}
     } do
-      {:error,
-       %Changeset{
-         errors: [
-           {:blockchain_id, {"does not exist", _detail}}
-           | _tail
-         ]
-       }} =
-        Payments.create(%{
-          blockchain_id: not_existing_uuid,
-          source_account_id: source_account_id,
-          destination_account_id: destination_account_id,
-          asset_id: asset_id,
-          amount: amount,
-          status: status,
-          successful: successful
+      %{account: %{id: source_account_id, signature: source_signature}} =
+        insert(:asset_holder, %{
+          blockchain: blockchain,
+          asset: asset,
+          is_minter: false
         })
+
+      Oban.Testing.with_testing_mode(:manual, fn ->
+        {:error, :source_balance_not_found} =
+          Payments.create(%{
+            source_signature: source_signature,
+            source_account_id: source_account_id,
+            destination_account_id: destination_account_id,
+            blockchain_id: blockchain_id,
+            asset_id: asset_id,
+            amount: "20000"
+          })
+
+        refute_enqueued(
+          worker: CreatePaymentWorker,
+          queue: :create_payment_queue
+        )
+      end)
     end
 
-    test "when source_account_id doesn't exist", %{
+    test "when the supply has an invalid format", %{
       blockchain: %{id: blockchain_id},
       asset: %{id: asset_id},
-      destination_account: %{id: destination_account_id},
-      amount: amount,
-      status: status,
-      successful: successful,
-      not_existing_uuid: not_existing_uuid
+      source_account: %{id: source_account_id, signature: source_signature},
+      destination_account: %{id: destination_account_id}
     } do
-      {:error,
-       %Changeset{
-         errors: [
-           {:source_account_id, {"does not exist", _detail}}
-           | _tail
-         ]
-       }} =
-        Payments.create(%{
-          blockchain_id: blockchain_id,
-          source_account_id: not_existing_uuid,
-          destination_account_id: destination_account_id,
-          asset_id: asset_id,
-          amount: amount,
-          status: status,
-          successful: successful
-        })
-    end
+      Oban.Testing.with_testing_mode(:manual, fn ->
+        {:error, :invalid_supply_format} =
+          Payments.create(%{
+            source_signature: source_signature,
+            source_account_id: source_account_id,
+            destination_account_id: destination_account_id,
+            blockchain_id: blockchain_id,
+            asset_id: asset_id,
+            amount: "invalid-supply"
+          })
 
-    test "when destination_account doesn't exist", %{
-      blockchain: %{id: blockchain_id},
-      asset: %{id: asset_id},
-      source_account: %{id: source_account_id},
-      amount: amount,
-      status: status,
-      successful: successful,
-      not_existing_uuid: not_existing_uuid
-    } do
-      {:error,
-       %Changeset{
-         errors: [
-           {:destination_account_id, {"does not exist", _detail}}
-           | _tail
-         ]
-       }} =
-        Payments.create(%{
-          blockchain_id: blockchain_id,
-          source_account_id: source_account_id,
-          destination_account_id: not_existing_uuid,
-          asset_id: asset_id,
-          amount: amount,
-          status: status,
-          successful: successful
-        })
-    end
-
-    test "when asset_id doesn't exist", %{
-      blockchain: %{id: blockchain_id},
-      source_account: %{id: source_account_id},
-      destination_account: %{id: destination_account_id},
-      amount: amount,
-      status: status,
-      successful: successful,
-      not_existing_uuid: not_existing_uuid
-    } do
-      {:error,
-       %Changeset{
-         errors: [
-           {:asset_id, {"does not exist", _detail}}
-           | _tail
-         ]
-       }} =
-        Payments.create(%{
-          blockchain_id: blockchain_id,
-          source_account_id: source_account_id,
-          destination_account_id: destination_account_id,
-          asset_id: not_existing_uuid,
-          amount: amount,
-          status: status,
-          successful: successful
-        })
+        refute_enqueued(
+          worker: CreatePaymentWorker,
+          queue: :create_payment_queue
+        )
+      end)
     end
   end
 

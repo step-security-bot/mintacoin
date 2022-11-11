@@ -56,6 +56,20 @@ defmodule Mintacoin.Balances do
     |> Repo.update()
   end
 
+  @spec decrease_balance(id :: id(), amount :: amount()) :: {:ok, balance()} | {:error, error()}
+  def decrease_balance(id, amount) do
+    %Balance{balance: balance_amount} = balance = Repo.get(Balance, id)
+
+    new_balance =
+      balance_amount
+      |> Decimal.sub(amount)
+      |> Decimal.to_string(:normal)
+
+    balance
+    |> Balance.changeset(%{balance: new_balance})
+    |> Repo.update()
+  end
+
   @spec retrieve_by_wallet_id(wallet_id :: id()) :: {:ok, list(balances())}
   def retrieve_by_wallet_id(wallet_id) do
     query = from(blc in Balance, where: blc.wallet_id == ^wallet_id)

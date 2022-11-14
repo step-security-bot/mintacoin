@@ -23,7 +23,4 @@ defmodule MintacoinWeb.AssetsView do
     addresses = Enum.map(accounts, fn %{address: address} -> address end)
     %{status: 200, data: %{addresses: addresses}}
   end
-
-  def render("error.json", %{error: %{status: status, code: code, detail: detail}}),
-    do: %{status: status, code: code, detail: detail}
 end

@@ -12,8 +12,18 @@ defmodule MintacoinWeb.FallbackController do
   @type conn :: Plug.Conn.t()
   @type error :: :not_found | :bad_request | map() | Changeset.t()
 
-  @supported_errors [:not_found, :bad_request]
-  @error_templates [bad_request: :"400", not_found: :"404"]
+  @error_templates [
+    not_found: {404, "Resource not found"},
+    bad_request: {400, "The body params are invalid"},
+    blockchain_not_found: {400, "The introduced blockchain doesn't exist"},
+    decoding_error: {400, "The signature is invalid"},
+    invalid_address: {400, "The address is invalid"},
+    invalid_seed_words: {400, "The seed words are invalid"},
+    asset_not_found: {400, "The introduced asset doesn't exist"},
+    wallet_not_found:
+      {400, "The introduced address doesn't exist or doesn't have associated the blockchain"},
+    invalid_supply_format: {400, "The introduced supply format is invalid"}
+  ]
 
   # This clause handles errors returned by Ecto's insert/update/delete.
   @spec call(conn :: conn(), {:error, error()}) :: conn()
@@ -25,17 +35,12 @@ defmodule MintacoinWeb.FallbackController do
   end
 
   # This clause handles default errors returned by control actions.
-  def call(conn, {:error, error}) when error in @supported_errors do
-    conn
-    |> put_status(error)
-    |> put_view(ErrorView)
-    |> render(@error_templates[error])
-  end
+  def call(conn, {:error, error}) do
+    {status, message} = Keyword.get(@error_templates, error, {400, "Bad request"})
 
-  # This clause handles errors that have a specific response code and will be displayed by the associated view.
-  def call(conn, {:error, %{status: status} = error}) do
     conn
     |> put_status(status)
-    |> render("error.json", error: error)
+    |> put_view(ErrorView)
+    |> render("error.json", error: %{status: status, detail: message, code: error})
   end
 end

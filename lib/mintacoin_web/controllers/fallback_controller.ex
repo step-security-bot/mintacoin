@@ -22,7 +22,12 @@ defmodule MintacoinWeb.FallbackController do
     asset_not_found: {400, "The introduced asset doesn't exist"},
     wallet_not_found:
       {400, "The introduced address doesn't exist or doesn't have associated the blockchain"},
-    invalid_supply_format: {400, "The introduced supply format is invalid"}
+    destination_trustline_not_found:
+      {400, "The destination account doesn't have a trustline with the asset"},
+    source_balance_not_found:
+      {400, "The source account doesn't have a balance of the given asset"},
+    invalid_supply_format: {400, "The introduced supply format is invalid"},
+    insufficient_funds: {400, "The source account doesn't have enough funds to make the payment"}
   ]
 
   # This clause handles errors returned by Ecto's insert/update/delete.

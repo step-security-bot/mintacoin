@@ -131,7 +131,7 @@ defmodule Mintacoin.Payments.PaymentsTest do
       destination_account: %{id: destination_account_id}
     } do
       Oban.Testing.with_testing_mode(:manual, fn ->
-        {:error, :insuficient_funds} =
+        {:error, :insufficient_funds} =
           Payments.create(%{
             source_signature: source_signature,
             source_account_id: source_account_id,

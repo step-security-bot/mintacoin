@@ -9,6 +9,7 @@ defmodule Mintacoin.Payments do
 
   alias Mintacoin.{
     Account,
+    Accounts.Cipher,
     AssetHolder,
     AssetHolders,
     Balance,
@@ -30,11 +31,13 @@ defmodule Mintacoin.Payments do
   @type payment :: Payment.t()
   @type payments :: list(payment) | []
   @type signature :: String.t()
+  @type encrypted_secret_key :: String.t()
   @type error ::
           Changeset.t()
+          | :decoding_error
           | :invalid_supply_format
           | :destination_trustline_not_found
-          | :insuficient_funds
+          | :insufficient_funds
           | :source_balance_not_found
 
   @spec create(params :: params()) :: {:ok, payment()} | {:error, error()}
@@ -47,8 +50,9 @@ defmodule Mintacoin.Payments do
         amount: amount
       }) do
     with {:ok, amount} <- validate_amount(amount),
-         {:ok, %Wallet{id: source_wallet_id}} <-
+         {:ok, %Wallet{id: source_wallet_id, encrypted_secret_key: encrypted_secret_key}} <-
            Wallets.retrieve_by_account_id_and_blockchain_id(source_account_id, blockchain_id),
+         {:ok, _secret_key} <- validate_source_signature(source_signature, encrypted_secret_key),
          {:ok, %Wallet{id: destination_wallet_id}} <-
            Wallets.retrieve_by_account_id_and_blockchain_id(destination_account_id, blockchain_id),
          {:ok, __asset_holder} <- validate_asset_trustline(destination_wallet_id, asset_id),
@@ -101,6 +105,17 @@ defmodule Mintacoin.Payments do
       )
 
     {:ok, Repo.all(query)}
+  end
+
+  @spec validate_source_signature(
+          source_signature :: signature(),
+          encrypted_secret_key :: encrypted_secret_key()
+        ) :: {:ok, signature()} | {:error, error()}
+  defp validate_source_signature(source_signature, encrypted_secret_key) do
+    case Cipher.decrypt(encrypted_secret_key, source_signature) do
+      {:ok, secret_key} -> {:ok, secret_key}
+      {:error, error} -> {:error, error}
+    end
   end
 
   @spec create_db_record(params :: params()) :: {:ok, payment()} | {:error, error()}
@@ -179,7 +194,7 @@ defmodule Mintacoin.Payments do
 
     case Decimal.negative?(difference) do
       false -> {:ok, balance}
-      true -> {:error, :insuficient_funds}
+      true -> {:error, :insufficient_funds}
     end
   end
 

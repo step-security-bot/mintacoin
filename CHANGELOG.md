@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.0 (15.11.2022)
+## 0.4.0 (16.11.2022)
 * Add payment table and database functions.
 * Add `stellar_sdk` implementation to create a payment in the Stellar network.
 * Add oban worker to process the payment creation in the blockchain.
@@ -8,6 +8,7 @@
 * Add project dockerization for dev and test env.
 * Upgrade `stellar_sdk` to `v0.11.4`.
 * Refactor error management for the controllers.
+* Update target branches in CI workflow.
 
 ## 0.3.2 (10.11.2022)
 * Add API versioning for version `v1-alpha`.

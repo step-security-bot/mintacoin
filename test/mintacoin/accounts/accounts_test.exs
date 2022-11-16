@@ -16,8 +16,10 @@ defmodule Mintacoin.Accounts.AccountsTest do
     Accounts.Cipher,
     AssetHolder,
     Assets,
+    Blockchain,
     BlockchainTx,
-    BlockchainTxs
+    BlockchainTxs,
+    Customer
   }
 
   alias Mintacoin.Accounts.StellarMock, as: AccountsStellarMock
@@ -28,6 +30,7 @@ defmodule Mintacoin.Accounts.AccountsTest do
 
   setup do
     :ok = Sandbox.checkout(Mintacoin.Repo)
+    %Customer{id: customer_id} = insert(:customer, %{email: "customer@mintacoin.com"})
 
     Application.put_env(:mintacoin, :crypto_impl, AccountsStellarMock)
 
@@ -36,13 +39,14 @@ defmodule Mintacoin.Accounts.AccountsTest do
     end)
 
     %{
+      customer_id: customer_id,
       invalid_address: "INVALID_ADDRESS",
       not_found_uuid: "d9cb83d6-05f5-4557-b5d0-9e1728c42091"
     }
   end
 
-  test "create_db_record/1" do
-    {:ok, %Account{}} = Accounts.create_db_record()
+  test "create_db_record/1", %{customer_id: customer_id} do
+    {:ok, %Account{}} = Accounts.create_db_record(customer_id)
   end
 
   describe "retrieve_by_id/1" do
@@ -85,16 +89,16 @@ defmodule Mintacoin.Accounts.AccountsTest do
     end
   end
 
-  describe "create/1" do
+  describe "create/2" do
     setup do
       blockchain = insert(:blockchain, %{name: "stellar"})
 
       %{blockchain: blockchain}
     end
 
-    test "enqueuing create account job", %{blockchain: blockchain} do
+    test "enqueuing create account job", %{blockchain: blockchain, customer_id: customer_id} do
       Oban.Testing.with_testing_mode(:manual, fn ->
-        {:ok, %Account{}} = Accounts.create(blockchain)
+        {:ok, %Account{}} = Accounts.create(%{blockchain: blockchain, customer_id: customer_id})
 
         assert_enqueued(
           worker: CreateAccountWorker,
@@ -103,8 +107,12 @@ defmodule Mintacoin.Accounts.AccountsTest do
       end)
     end
 
-    test "with valid params", %{blockchain: %{id: blockchain_id} = blockchain} do
-      {:ok, %Account{id: account_id}} = Accounts.create(blockchain)
+    test "with valid params", %{
+      blockchain: %{id: blockchain_id} = blockchain,
+      customer_id: customer_id
+    } do
+      {:ok, %Account{id: account_id}} =
+        Accounts.create(%{blockchain: blockchain, customer_id: customer_id})
 
       {:ok, [blockchain_tx | _tail]} = BlockchainTxs.retrieve_by_account_id(account_id)
 
@@ -131,6 +139,34 @@ defmodule Mintacoin.Accounts.AccountsTest do
 
     test "when asset id doesn't exist", %{not_existing_asset_id: not_existing_asset_id} do
       {:ok, []} = Accounts.retrieve_accounts_by_asset_id(not_existing_asset_id)
+    end
+  end
+
+  describe "retrieve_by_customer_id/1" do
+    setup [:create_account]
+
+    test "when customer id exist", %{
+      account: %{
+        id: id,
+        address: address,
+        encrypted_signature: encrypted_signature,
+        customer_id: customer_id
+      }
+    } do
+      {:ok,
+       [
+         %Account{
+           id: ^id,
+           address: ^address,
+           encrypted_signature: ^encrypted_signature,
+           customer_id: ^customer_id
+         }
+         | _tail
+       ]} = Accounts.retrieve_by_customer_id(customer_id)
+    end
+
+    test "when the customer doesn't exist", %{not_found_uuid: not_found_uuid} do
+      {:ok, []} = Accounts.retrieve_by_customer_id(not_found_uuid)
     end
   end
 
@@ -308,5 +344,15 @@ defmodule Mintacoin.Accounts.AccountsTest do
       Application.delete_env(:mintacoin, :crypto_impl)
       Application.delete_env(:stellar_mock, :tx_status)
     end)
+  end
+
+  defp create_account(_customer_id) do
+    %Blockchain{id: blockchain_id} = insert(:blockchain, %{name: "stellar"})
+    %Customer{id: customer_id} = insert(:customer)
+
+    {:ok, account} =
+      Accounts.create(%{blockchain: %Blockchain{id: blockchain_id}, customer_id: customer_id})
+
+    %{account: account}
   end
 end

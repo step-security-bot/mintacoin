@@ -17,7 +17,7 @@ defmodule Mintacoin.CustomerFactory do
           "q62e5ySEDrlclOdrEi+7gmtp7qRNCDkCEHFFmjpsm0ATNPSXzexcrd3NEyDPI2TbnRuRV1nqXt51gofMNd5r2Yzbnul33HZjy11dtJoT7M7gl6VtOY597mT4bs5v2DgrgTEjo3omub/GfasqAVHHBGBDjycKrKMc2/vEoY0X0CpXt+muWZLa1zR58PxH+NfZa0b52j+dKB2Hb4zpzkbw5ghmnjUC9b265UZDydS0wxQ"
 
         name = Map.get(attrs, :name, "Customer")
-        email = Map.get(attrs, :email, "customer@mintacoin.co")
+        email = Map.get(attrs, :email, sequence(:email, &"customer_#{&1}@mintacoin.co"))
         api_key = Map.get(attrs, :api_key, default_api_key)
         encrypted_api_key = Map.get(attrs, :encrypted_api_key, default_encrypted_api_key)
 

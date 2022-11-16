@@ -23,7 +23,9 @@ defmodule MintacoinWeb.AccountsControllerTest do
     signature = "SB3RAKL2MRYZ53WJQAL5RJ42LPCMJTNDH4W7UWVRJA3GTEC66BC7VNUT"
 
     blockchain = insert(:blockchain, %{name: "stellar", network: "testnet"})
-    account = insert(:account, %{address: address, signature: signature})
+    customer = insert(:customer, %{email: "customer.account@mail.com"})
+
+    account = insert(:account, %{address: address, signature: signature, customer: customer})
 
     api_token = Application.get_env(:mintacoin, :api_token)
 
@@ -41,6 +43,7 @@ defmodule MintacoinWeb.AccountsControllerTest do
       account: account,
       address: address,
       signature: signature,
+      customer: customer,
       blockchain: blockchain,
       conn_authenticated: conn_authenticated,
       conn_unauthenticated: put_req_header(conn, "accept", "application/json"),
@@ -50,8 +53,16 @@ defmodule MintacoinWeb.AccountsControllerTest do
   end
 
   describe "create/2" do
-    test "with valid params", %{conn_authenticated: conn, blockchain: %{name: blockchain_name}} do
-      conn = post(conn, Routes.accounts_path(conn, :create), %{blockchain: blockchain_name})
+    test "with valid params", %{
+      conn_authenticated: conn,
+      blockchain: %{name: blockchain_name},
+      customer: %{id: customer_id}
+    } do
+      conn =
+        post(conn, Routes.accounts_path(conn, :create), %{
+          blockchain: blockchain_name,
+          customer_id: customer_id
+        })
 
       %{
         "data" => %{
@@ -63,8 +74,12 @@ defmodule MintacoinWeb.AccountsControllerTest do
       } = json_response(conn, 201)
     end
 
-    test "when blockchain is not valid", %{conn_authenticated: conn} do
-      conn = post(conn, Routes.accounts_path(conn, :create), %{blockchain: "INVALID"})
+    test "when blockchain is not valid", %{conn_authenticated: conn, customer: %{id: customer_id}} do
+      conn =
+        post(conn, Routes.accounts_path(conn, :create), %{
+          blockchain: "INVALID",
+          customer_id: customer_id
+        })
 
       %{
         "code" => "blockchain_not_found",

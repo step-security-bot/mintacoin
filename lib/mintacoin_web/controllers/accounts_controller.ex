@@ -33,7 +33,7 @@ defmodule MintacoinWeb.AccountsController do
   @type template :: String.t()
   @type uuid_cast :: {:ok, id()} | :error
   @type resource :: Account.t() | Asset.t() | String.t() | list() | nil
-  @type signature :: String.t()
+  @type signature :: String.t() | nil
   @type wallet :: Wallet.t()
   @type error ::
           :blockchain_not_found
@@ -48,10 +48,13 @@ defmodule MintacoinWeb.AccountsController do
   action_fallback MintacoinWeb.FallbackController
 
   @spec create(conn :: conn(), params :: params()) :: conn() | {:error, error()}
-  def create(%{assigns: %{network: network}} = conn, %{"blockchain" => blockchain}) do
+  def create(%{assigns: %{network: network}} = conn, %{
+        "blockchain" => blockchain,
+        "customer_id" => customer_id
+      }) do
     blockchain
     |> Blockchains.retrieve(network)
-    |> create_account()
+    |> create_account(customer_id)
     |> handle_response(conn, :created, "account.json")
   end
 
@@ -91,9 +94,12 @@ defmodule MintacoinWeb.AccountsController do
     |> handle_response(conn, :ok, "assets.json")
   end
 
-  @spec create_account({:ok, blockchain()}) :: {status(), resource()}
-  defp create_account({:ok, %Blockchain{} = blockchain}), do: Accounts.create(blockchain)
-  defp create_account({:ok, nil}), do: {:error, :blockchain_not_found}
+  @spec create_account(blockchain :: {:ok, blockchain()}, customer_id :: id()) ::
+          {status(), resource()}
+  defp create_account({:ok, %Blockchain{} = blockchain}, customer_id),
+    do: Accounts.create(%{blockchain: blockchain, customer_id: customer_id})
+
+  defp create_account({:ok, nil}, _customer_id), do: {:error, :blockchain_not_found}
 
   @spec retrieve_assets(account :: {:ok, account() | nil}) :: {:ok, list()} | {:error, error()}
   defp retrieve_assets({:ok, %Account{id: account_id}}),

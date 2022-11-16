@@ -8,11 +8,12 @@ defmodule Mintacoin.Account do
   import Ecto.Changeset
 
   alias Ecto.Changeset
-  alias Mintacoin.{AssetHolder, Payment, Wallet}
+  alias Mintacoin.{AssetHolder, Customer, Payment, Wallet}
 
   @type t :: %__MODULE__{
           address: String.t(),
-          encrypted_signature: String.t()
+          encrypted_signature: String.t(),
+          customer: Customer.t()
         }
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -27,6 +28,7 @@ defmodule Mintacoin.Account do
     has_many(:asset_holders, AssetHolder)
     has_many(:outgoing_payments, Payment, foreign_key: :source_account_id)
     has_many(:incoming_payments, Payment, foreign_key: :destination_account_id)
+    belongs_to(:customer, Customer, type: :binary_id)
 
     timestamps()
   end
@@ -38,9 +40,11 @@ defmodule Mintacoin.Account do
       :address,
       :encrypted_signature,
       :seed_words,
-      :signature
+      :signature,
+      :customer_id
     ])
-    |> validate_required([:address, :encrypted_signature])
+    |> validate_required([:address, :encrypted_signature, :customer_id])
+    |> foreign_key_constraint(:customer_id)
     |> unique_constraint([:address])
     |> unique_constraint([:encrypted_signature])
   end

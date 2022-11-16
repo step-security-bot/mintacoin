@@ -113,6 +113,13 @@ defmodule Mintacoin.BalancesTest do
     end
   end
 
+  describe "decrease_balance/2" do
+    test "with valid params", %{balance: %{id: balance_id}} do
+      {:ok, %Balance{id: ^balance_id, balance: "4.4522"}} =
+        Balances.decrease_balance(balance_id, "5.5478")
+    end
+  end
+
   describe "update_by_wallet_id_and_asset_id/2" do
     test "with valid params", %{
       balance: %{id: balance_id, wallet_id: wallet_id, asset_id: asset_id}

@@ -4,7 +4,7 @@ defmodule Mintacoin.MixProject do
   def project do
     [
       app: :mintacoin,
-      version: "0.3.2",
+      version: "0.4.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
@@ -61,7 +61,7 @@ defmodule Mintacoin.MixProject do
       {:ex_machina, "~> 2.7", only: :test},
       {:ecto_enum, "~> 1.4"},
       {:oban, "~> 2.13"},
-      {:stellar_sdk, "~> 0.10.0"},
+      {:stellar_sdk, "~> 0.11.4"},
       {:decimal, "~> 2.0"},
       {:excoveralls, "~> 0.15", only: :test}
     ]

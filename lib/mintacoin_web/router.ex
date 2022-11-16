@@ -23,6 +23,8 @@ defmodule MintacoinWeb.Router do
     resources "/assets", AssetsController, except: [:index]
     get "/assets/:id/issuer", AssetsController, :show_issuer
     get "/assets/:id/accounts", AssetsController, :show_accounts
+
+    post "/payments", PaymentsController, :create
   end
 
   # Enables LiveDashboard only for development

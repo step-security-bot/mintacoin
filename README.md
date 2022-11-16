@@ -56,23 +56,23 @@ Mintacoin's documentation is available here: [docs.mintacoin.co](https://docs.mi
 
 To know the current status of the project, you can check Mintacoin's roadmap here: [**ROADMAP**][roadmap] 🗺️
 
-> The current release for the project is the version **v0.3.2**.
+> The current release for the project is the version **v0.4.0**.
 
 ## Development
 
 Here we will show up the Mintacoin's setup for development purposes, follow the next steps:
 
-**Requirements**
+### Requirements
 
 - Elixir <= v1.14
 - Erlang <= 24.3
 - PostgreSQL >= v14 (latest)
 
-**Setting up**
+#### Setting up
 
-1. Install dependencies with `mix deps.get`.
+1. Mintacoin requires a development configuration file. Copy the example with the `cp config/dev.exs.example config/dev.exs`.
 
-2. Mintacoin requires a development configuration file. Copy the example with the `cp config/dev.exs.example config/dev.exs`.
+2. Install dependencies with `mix deps.get`.
 
 3. Within the file `dev.exs` replace the following variables:
 
@@ -88,9 +88,29 @@ Here we will show up the Mintacoin's setup for development purposes, follow the 
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-**Testing**
+#### Testing
 
 Run the tests with `mix test`.
+
+#### Setting up with Docker
+
+1. First, you need to execute steps **2** and **3** from the previous setup.
+
+2. Build the Phoenix and Postgres images with `docker-compose build`.
+
+3. Finally, run the containers `docker-compose up`.
+
+Now you can visit [`localhost:4000`](http://localhost:4000) from your browser (only if port 4000 is available).
+
+#### Testing with Docker
+
+Run the tests with `docker-compose run mintacoin_api mix test`.
+
+#### Run commands with Docker
+* Run the IEx console with `docker-compose run mintacoin_api iex -S mix`. 
+* Run your new migrations with `docker-compose run mintacoin_api mix ecto.migrate`. 
+* Install new dependencies with `docker-compose run mintacoin_api mix deps.get`. 
+* Run any mix task with `docker-compose run mintacoin_api mix <task>`.
 
 ---
 

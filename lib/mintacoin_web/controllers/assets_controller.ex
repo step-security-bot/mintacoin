@@ -42,22 +42,10 @@ defmodule MintacoinWeb.AssetsController do
           | :decoding_error
           | :bad_request
           | :asset_not_found
-          | :encryption_error
           | :wallet_not_found
           | Changeset.t()
 
   action_fallback MintacoinWeb.FallbackController
-
-  @errors %{
-    blockchain_not_found: {400, "The introduced blockchain doesn't exist"},
-    invalid_supply_format: {400, "The introduced supply format is invalid"},
-    decoding_error: {400, "The signature is invalid"},
-    bad_request: {400, "The body params are invalid"},
-    asset_not_found: {400, "The introduced asset doesn't exist"},
-    encryption_error: {400, "Error during encryption"},
-    wallet_not_found:
-      {400, "The introduced address doesn't exist or doesn't have associated the blockchain"}
-  }
 
   @default_blockchain_name Blockchain.default()
 
@@ -84,21 +72,24 @@ defmodule MintacoinWeb.AssetsController do
 
   @spec show(conn :: conn(), params :: params()) :: conn() | {:error, error()}
   def show(conn, %{"id" => id}) do
-    UUID.cast(id)
+    id
+    |> UUID.cast()
     |> retrieve_asset()
     |> handle_response(conn, :ok, "show_asset.json")
   end
 
   @spec show_issuer(conn :: conn(), params :: params()) :: conn() | {:error, error()}
   def show_issuer(conn, %{"id" => id}) do
-    UUID.cast(id)
+    id
+    |> UUID.cast()
     |> retrieve_issuer()
     |> handle_response(conn, :ok, "asset_issuer.json")
   end
 
   @spec show_accounts(conn :: conn(), params :: params()) :: conn() | {:error, error()}
   def show_accounts(conn, %{"id" => id}) do
-    UUID.cast(id)
+    id
+    |> UUID.cast()
     |> retrieve_accounts()
     |> handle_response(conn, :ok, "asset_accounts.json")
   end
@@ -184,12 +175,5 @@ defmodule MintacoinWeb.AssetsController do
     |> render(template, resource: resource)
   end
 
-  defp handle_response({:error, %Changeset{} = changeset}, _conn, _status, _template),
-    do: {:error, changeset}
-
-  defp handle_response({:error, resource}, _conn, _status, _template) do
-    {status, message} = Map.get(@errors, resource, {400, "Accounts Controller Error"})
-
-    {:error, %{status: status, detail: message, code: resource}}
-  end
+  defp handle_response({:error, error}, _conn, _status, _template), do: {:error, error}
 end

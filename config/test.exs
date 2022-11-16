@@ -6,10 +6,11 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :mintacoin, Mintacoin.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "mintacoin_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database:
+    System.get_env("POSTGRES_DB_TEST", "mintacoin_test#{System.get_env("MIX_TEST_PARTITION")}"),
+  username: System.get_env("POSTGRES_USER", "postgres"),
+  password: System.get_env("POSTGRES_PASSWORD", "postgres"),
+  hostname: System.get_env("POSTGRES_HOST", "localhost"),
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
@@ -38,3 +39,6 @@ config :stellar_sdk, network: :test
 config :mintacoin,
   api_token:
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
+# For Accounts creation
+config :mintacoin, starting_balance: System.get_env("STARTING_BALANCE", "10.0")

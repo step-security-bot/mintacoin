@@ -16,7 +16,10 @@ defmodule Mintacoin.AssetHolderFactory do
         is_minter = Map.get(attrs, :is_minter, true)
 
         wallet =
-          Map.get(attrs, :wallet, insert(:wallet, %{account: account, blockchain: blockchain}))
+          case Map.get(attrs, :wallet) do
+            nil -> insert(:wallet, %{account: account, blockchain: blockchain})
+            wallet -> wallet
+          end
 
         %AssetHolder{
           id: UUID.generate(),

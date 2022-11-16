@@ -10,12 +10,13 @@ defmodule Mintacoin.BalancesFactory do
       @spec balance_factory(attrs :: map()) :: Balance.t()
       def balance_factory(attrs) do
         balance = Map.get(attrs, :balance, "100")
-        account = Map.get(attrs, :account, insert(:account))
-        blockchain = Map.get(attrs, :blockchain, insert(:blockchain))
         asset = Map.get(attrs, :asset, insert(:asset))
 
         wallet =
-          Map.get(attrs, :wallet, insert(:wallet, %{account: account, blockchain: blockchain}))
+          case Map.get(attrs, :wallet) do
+            nil -> insert(:wallet)
+            wallet -> wallet
+          end
 
         %Balance{
           asset: asset,

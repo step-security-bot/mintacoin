@@ -1,6 +1,5 @@
 defmodule MintacoinWeb.ErrorView do
   use MintacoinWeb, :view
-
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.
   # def render("500.json", _assigns) do
@@ -17,5 +16,6 @@ defmodule MintacoinWeb.ErrorView do
   def render("401.json", %{message: message}),
     do: %{status: :unauthorized, code: 401, detail: message}
 
-  def render("error.json", %{message: message}), do: %{status: :error, message: message}
+  def render("error.json", %{error: %{status: status, detail: detail, code: code}}),
+    do: %{status: status, code: code, detail: detail}
 end

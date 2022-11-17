@@ -19,7 +19,7 @@ defmodule Mintacoin.Customers.CustomersTest do
     %{
       account: account,
       customer: customer,
-      name: "Customer",
+      name: "customer",
       email: "customer@customer.com",
       invalid_email: "customer@customer.mintacoin",
       new_name: "Mintacoin",

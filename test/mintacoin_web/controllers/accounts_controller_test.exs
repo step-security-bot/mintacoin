@@ -23,11 +23,10 @@ defmodule MintacoinWeb.AccountsControllerTest do
     signature = "SB3RAKL2MRYZ53WJQAL5RJ42LPCMJTNDH4W7UWVRJA3GTEC66BC7VNUT"
 
     blockchain = insert(:blockchain, %{name: "stellar", network: "testnet"})
-    customer = insert(:customer, %{email: "customer.account@mail.com"})
+
+    %{api_key: api_token} = customer = insert(:customer)
 
     account = insert(:account, %{address: address, signature: signature, customer: customer})
-
-    api_token = Application.get_env(:mintacoin, :api_token)
 
     conn_authenticated =
       conn

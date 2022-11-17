@@ -48,9 +48,8 @@ defmodule MintacoinWeb.AccountsController do
   action_fallback MintacoinWeb.FallbackController
 
   @spec create(conn :: conn(), params :: params()) :: conn() | {:error, error()}
-  def create(%{assigns: %{network: network}} = conn, %{
-        "blockchain" => blockchain,
-        "customer_id" => customer_id
+  def create(%{assigns: %{network: network, customer_id: customer_id}} = conn, %{
+        "blockchain" => blockchain
       }) do
     blockchain
     |> Blockchains.retrieve(network)

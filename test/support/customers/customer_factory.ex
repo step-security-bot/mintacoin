@@ -4,17 +4,21 @@ defmodule Mintacoin.CustomerFactory do
   """
 
   alias Ecto.UUID
-  alias Mintacoin.Customer
+  alias Mintacoin.{Accounts.Cipher, Customer}
+  alias Phoenix.Token
 
   defmacro __using__(_opts) do
     quote do
       @spec customer_factory(attrs :: map()) :: Customer.t()
       def customer_factory(attrs) do
-        default_api_key =
-          "SFMyNTY.g2gDdAAAAAFkAAphY2NvdW50X2lkbQAAACQ4ZDkzYTkyOC05ZjM5LTQ4ZWMtOGIyNy0xZTdmN2NiZmE3NGVuBgDZmfYPhAFiAFxJAA.SRlUgdy7igREKsUdMM3POiqKZMr5bke9xAq8qa_ad_A"
+        id = UUID.generate()
+        secret_key_base = Application.get_env(:mintacoin, :secret_key_base)
+        signing_salt = Application.get_env(:mintacoin, :signing_salt)
 
-        default_encrypted_api_key =
-          "q62e5ySEDrlclOdrEi+7gmtp7qRNCDkCEHFFmjpsm0ATNPSXzexcrd3NEyDPI2TbnRuRV1nqXt51gofMNd5r2Yzbnul33HZjy11dtJoT7M7gl6VtOY597mT4bs5v2DgrgTEjo3omub/GfasqAVHHBGBDjycKrKMc2/vEoY0X0CpXt+muWZLa1zR58PxH+NfZa0b52j+dKB2Hb4zpzkbw5ghmnjUC9b265UZDydS0wxQ"
+        default_api_key =
+          Token.sign(secret_key_base, signing_salt, %{customer_id: id}, max_age: 60)
+
+        {:ok, default_encrypted_api_key} = Cipher.encrypt_with_system_key(default_api_key)
 
         name = Map.get(attrs, :name, "Customer")
         email = Map.get(attrs, :email, sequence(:email, &"customer_#{&1}@mintacoin.co"))
@@ -22,7 +26,7 @@ defmodule Mintacoin.CustomerFactory do
         encrypted_api_key = Map.get(attrs, :encrypted_api_key, default_encrypted_api_key)
 
         %Customer{
-          id: UUID.generate(),
+          id: id,
           email: email,
           name: name,
           api_key: api_key,

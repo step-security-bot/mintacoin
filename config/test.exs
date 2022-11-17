@@ -42,10 +42,5 @@ config :mintacoin, signing_salt: "g6gVDdqHZeWeLiH1i5b7QlhZGNr2PaLo"
 # Stellar SDK configuration
 config :stellar_sdk, network: :test
 
-# Temporal API Authentication
-config :mintacoin,
-  api_token:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-
 # For Accounts creation
 config :mintacoin, starting_balance: System.get_env("STARTING_BALANCE", "10.0")

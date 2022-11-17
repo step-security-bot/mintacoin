@@ -31,7 +31,7 @@ defmodule MintacoinWeb.PaymentsControllerTest do
         signature: "WZTTQ2B42QBTXJU5ZOTZUSF72V7E55BMBTGDOLY5W5NW6T3U7S6Q"
       })
 
-    api_token = Application.get_env(:mintacoin, :api_token)
+    %{api_key: api_token} = insert(:customer)
 
     conn_authenticated =
       conn

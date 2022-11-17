@@ -25,7 +25,7 @@ defmodule Mintacoin.Customer do
 
   @code_regex ~r/^[A-Za-z0-9\._%+.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
 
-  @primary_key {:id, :binary_id, autogenerate: true}
+  @primary_key {:id, :binary_id, autogenerate: false}
   schema "customers" do
     field(:email, :string)
     field(:name, :string)
@@ -45,8 +45,8 @@ defmodule Mintacoin.Customer do
   @spec create_changeset(customer :: %__MODULE__{}, attrs :: map()) :: Changeset.t()
   def create_changeset(customer, attrs) do
     customer
-    |> cast(attrs, [:api_key, :email, :encrypted_api_key, :name])
-    |> validate_required([:api_key, :email, :encrypted_api_key, :name])
+    |> cast(attrs, [:id, :api_key, :email, :encrypted_api_key, :name])
+    |> validate_required([:id, :api_key, :email, :encrypted_api_key, :name])
     |> validate_format(:email, @code_regex)
     |> unique_constraint(:email)
   end

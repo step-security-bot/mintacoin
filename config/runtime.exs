@@ -69,9 +69,6 @@ if config_env() == :prod do
   # Encryption variables for accounts signatures
   config :mintacoin, encryption_variable: System.fetch_env!("ENCRYPTION_VARIABLE")
 
-  # Temporal API Authentication
-  config :mintacoin, api_token: System.fetch_env!("API_TOKEN")
-
   # For Accounts creation
   config :mintacoin, starting_balance: System.fetch_env!("STARTING_BALANCE")
 

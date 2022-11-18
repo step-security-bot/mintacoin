@@ -40,7 +40,7 @@ defmodule Mintacoin.Accounts.StellarMock do
          signatures: [
            "Z8AKJ6GiyYoHUO0wIGcbGe1egu7K1D5K4y50XmF9aRjoD9lxXsIl27Np6k4RJ0h/gqUCxrX2lBY0AhzkzfDjCw=="
          ],
-         source_account: "GA2YG3YULNTUEMMLN4HUQVL7B37GJTYSRZYH6HZUFLXFDCCGKLXIXMDT",
+         source_account: "GBYYS5GDK3ODHWSB6THERJMBQ25P7EM2MFQ4PP7RA6BO6DTUZKW236CD",
          source_account_sequence: 508_451_113_402_369,
          successful: true,
          valid_after: nil,

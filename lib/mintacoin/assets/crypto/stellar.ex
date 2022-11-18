@@ -70,7 +70,7 @@ defmodule Mintacoin.Assets.Stellar do
   @spec execute_transaction(tx_envelop :: tx_envelop()) :: impl_response()
   defp execute_transaction({:ok, envelope}) do
     envelope
-    |> Horizon.Transactions.create()
+    |> horizon_transaction_client().create()
     |> format_response()
   end
 
@@ -92,7 +92,7 @@ defmodule Mintacoin.Assets.Stellar do
 
   @spec get_sequence_number(public_key :: key()) :: sequence_number()
   defp get_sequence_number(public_key) do
-    {:ok, seq_num} = Horizon.Accounts.fetch_next_sequence_number(public_key)
+    {:ok, seq_num} = horizon_account_client().fetch_next_sequence_number(public_key)
     TxBuild.SequenceNumber.new(seq_num)
   end
 
@@ -175,4 +175,12 @@ defmodule Mintacoin.Assets.Stellar do
   end
 
   defp format_response({:error, response}), do: {:error, response}
+
+  defp horizon_transaction_client do
+    Application.get_env(:mintacoin, :horizon, Horizon.Transactions)
+  end
+
+  defp horizon_account_client do
+    Application.get_env(:mintacoin, :horizon, Horizon.Accounts)
+  end
 end

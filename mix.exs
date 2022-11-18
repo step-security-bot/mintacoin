@@ -4,7 +4,7 @@ defmodule Mintacoin.MixProject do
   def project do
     [
       app: :mintacoin,
-      version: "0.5.0",
+      version: "0.5.1",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),

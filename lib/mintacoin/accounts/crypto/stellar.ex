@@ -23,8 +23,6 @@ defmodule Mintacoin.Accounts.Stellar do
 
   @behaviour Mintacoin.Accounts.Crypto.Spec
 
-  @starting_balance Application.compile_env!(:mintacoin, :starting_balance)
-
   @impl true
   def create_account(_opts) do
     {public_key, secret_key} = KeyPair.random()
@@ -49,7 +47,7 @@ defmodule Mintacoin.Accounts.Stellar do
   @spec build_create_account_operation(destination :: public_key()) ::
           create_account()
   defp build_create_account_operation(destination) do
-    starting_balance = String.to_float(@starting_balance)
+    starting_balance = starting_balance() |> String.to_float()
 
     CreateAccount.new(
       destination: destination,
@@ -132,4 +130,6 @@ defmodule Mintacoin.Accounts.Stellar do
   defp horizon_account_client do
     Application.get_env(:mintacoin, :horizon, Horizon.Accounts)
   end
+
+  defp starting_balance, do: Application.get_env(:mintacoin, :starting_balance)
 end

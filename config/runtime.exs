@@ -72,6 +72,9 @@ if config_env() == :prod do
   # For Accounts creation
   config :mintacoin, starting_balance: System.fetch_env!("STARTING_BALANCE")
 
+  # Home redirect url
+  config :mintacoin, home_redirect_url: System.fetch_env!("HOME_REDIRECT_URL")
+
   # Secret to generate authentication token
   config :mintacoin, secret_key_base: System.fetch_env!("SECRET_KEY_BASE")
   config :mintacoin, signing_salt: System.fetch_env!("SIGNING_SALT")

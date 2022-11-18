@@ -10,10 +10,10 @@ defmodule MintacoinWeb.HomeControllerTest do
       html =
         conn
         |> get("/v1-alpha")
-        |> html_response(200)
+        |> html_response(302)
 
-      assert html =~ "Welcome to Mintacoin"
-      assert html =~ "Minimalist API to run your crypto"
+      assert html =~ "redirected"
+      assert html =~ "https://docs.mintacoin.co/"
     end
   end
 
@@ -22,10 +22,10 @@ defmodule MintacoinWeb.HomeControllerTest do
       html =
         conn
         |> get("/")
-        |> html_response(200)
+        |> html_response(302)
 
-      assert html =~ "Welcome to Mintacoin"
-      assert html =~ "Minimalist API to run your crypto"
+      assert html =~ "redirected"
+      assert html =~ "https://docs.mintacoin.co/"
     end
   end
 end

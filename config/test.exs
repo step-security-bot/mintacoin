@@ -44,3 +44,6 @@ config :stellar_sdk, network: :test
 
 # For Accounts creation
 config :mintacoin, starting_balance: System.get_env("STARTING_BALANCE", "10.0")
+
+# Home redirect url
+config :mintacoin, home_redirect_url: "https://docs.mintacoin.co/"

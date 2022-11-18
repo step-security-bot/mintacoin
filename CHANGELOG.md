@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0 (18.11.2022)
+* Add customers table and database functions.
+* Update accounts table to add the relation with customers.
+* Update the API authorization to use the customer API key token.
+* Add tests for the stellar implementation modules.
+* Update the API home landing.
+
 ## 0.4.0 (16.11.2022)
 * Add payment table and database functions.
 * Add `stellar_sdk` implementation to create a payment in the Stellar network.

@@ -33,12 +33,17 @@ config :mintacoin, Oban, testing: :inline
 # Encryption variables for accounts signatures
 config :mintacoin, encryption_variable: "HQHSCWQ4HNBMLFUWHU2S7H3KGU"
 
+# Secret to generate authentication token
+config :mintacoin,
+  secret_key_base: "TsKzdh4cyS0eYXjISZmZzlbOriQvzIXf5cj6mX7OfUFLLq2RdzuH2+uCg3+3jRNe"
+
+config :mintacoin, signing_salt: "g6gVDdqHZeWeLiH1i5b7QlhZGNr2PaLo"
+
 # Stellar SDK configuration
 config :stellar_sdk, network: :test
 
-config :mintacoin,
-  api_token:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-
 # For Accounts creation
 config :mintacoin, starting_balance: System.get_env("STARTING_BALANCE", "10.0")
+
+# Home redirect url
+config :mintacoin, home_redirect_url: "https://docs.mintacoin.co/"

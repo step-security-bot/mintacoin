@@ -6,7 +6,7 @@ defmodule Mintacoin.Payments.Stellar do
   @behaviour Mintacoin.Payments.Crypto.Spec
 
   alias Mintacoin.Payments.Crypto.PaymentResponse
-  alias Stellar.{Horizon, Horizon.Transaction, Horizon.Transactions, KeyPair, TxBuild}
+  alias Stellar.{Horizon, Horizon.Transaction, KeyPair, TxBuild}
   alias Stellar.TxBuild.Payment
 
   @type account_information :: map()
@@ -100,21 +100,21 @@ defmodule Mintacoin.Payments.Stellar do
     source_public_key
     |> TxBuild.Account.new()
     |> Stellar.TxBuild.new(sequence_number: sequence_number)
-    |> TxBuild.add_operations(operations)
+    |> tx_build_client().add_operations(operations)
     |> TxBuild.sign(signatures)
     |> TxBuild.envelope()
   end
 
   @spec get_sequence_number(public_key :: key()) :: sequence_number()
   defp get_sequence_number(public_key) do
-    {:ok, seq_num} = Horizon.Accounts.fetch_next_sequence_number(public_key)
+    {:ok, seq_num} = horizon_account_client().fetch_next_sequence_number(public_key)
     TxBuild.SequenceNumber.new(seq_num)
   end
 
   @spec execute_transaction(envelope :: envelope()) :: format_response()
   defp execute_transaction({:ok, envelop}) do
     envelop
-    |> Transactions.create()
+    |> horizon_transaction_client().create()
     |> format_response()
   end
 
@@ -135,4 +135,16 @@ defmodule Mintacoin.Payments.Stellar do
   end
 
   defp format_response({:error, response}), do: {:error, response}
+
+  defp horizon_transaction_client do
+    Application.get_env(:mintacoin, :horizon, Horizon.Transactions)
+  end
+
+  defp horizon_account_client do
+    Application.get_env(:mintacoin, :horizon, Horizon.Accounts)
+  end
+
+  defp tx_build_client do
+    Application.get_env(:mintacoin, :horizon, Stellar.TxBuild)
+  end
 end

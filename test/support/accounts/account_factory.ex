@@ -14,6 +14,7 @@ defmodule Mintacoin.AccountFactory do
 
         account_address = Map.get(attrs, :address, address)
         account_signature = Map.get(attrs, :signature, signature)
+        customer = Map.get(attrs, :customer, insert(:customer))
 
         {:ok, seed_words} = Keypair.build_seed_words()
 
@@ -29,7 +30,8 @@ defmodule Mintacoin.AccountFactory do
           address: account_address,
           encrypted_signature: account_encrypted_signature,
           signature: account_signature,
-          seed_words: account_seed_words
+          seed_words: account_seed_words,
+          customer: customer
         }
         |> merge_attributes(attrs)
         |> evaluate_lazy_attributes()

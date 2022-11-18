@@ -10,10 +10,10 @@ defmodule Mintacoin.Accounts do
     Account,
     Accounts.Cipher,
     Accounts.Keypair,
-    Asset,
     AssetHolder,
     AssetHolders,
     Blockchain,
+    Customer,
     Repo,
     Wallet
   }
@@ -26,9 +26,9 @@ defmodule Mintacoin.Accounts do
   @type seed_words :: String.t()
   @type signature :: String.t() | nil
   @type account :: Account.t() | nil
-  @type asset :: Asset.t()
   @type asset_holder :: AssetHolder.t()
   @type asset_code :: String.t()
+  @type customer :: Customer.t() | nil
   @type params :: map()
   @type wallet :: Wallet.t()
   @type encrypted_key :: String.t()
@@ -40,9 +40,10 @@ defmodule Mintacoin.Accounts do
           | :invalid_seed_words
           | :asset_not_found
 
-  @spec create(Mintacoin.Blockchain.t()) :: {:ok, Account.t()} | {:error, error()}
-  def create(%Blockchain{id: blockchain_id}) do
-    with {:ok, %Account{id: account_id, signature: signature} = account} <- create_db_record(),
+  @spec create(params :: params()) :: {:ok, account()} | {:error, error()}
+  def create(%{blockchain: %Blockchain{id: blockchain_id}, customer_id: customer_id}) do
+    with {:ok, %Account{id: account_id, signature: signature} = account} <-
+           create_db_record(customer_id),
          {:ok, encrypted_signature} <- Cipher.encrypt_with_system_key(signature) do
       %{
         account_id: account_id,
@@ -56,12 +57,14 @@ defmodule Mintacoin.Accounts do
     end
   end
 
-  @spec create_db_record :: {:ok, Account.t()} | {:error, error()}
-  def create_db_record do
-    signature_fields = Keypair.build_signature_fields()
+  @spec create_db_record(customer_id :: id()) :: {:ok, account()} | {:error, error()}
+  def create_db_record(customer_id) do
+    changeset =
+      Keypair.build_signature_fields()
+      |> Map.merge(%{customer_id: customer_id})
 
     %Account{}
-    |> Account.create_changeset(signature_fields)
+    |> Account.create_changeset(changeset)
     |> Repo.insert()
   end
 
@@ -109,6 +112,18 @@ defmodule Mintacoin.Accounts do
         join: asset_holder in AssetHolder,
         on: account.id == asset_holder.account_id,
         where: asset_holder.asset_id == ^asset_id
+      )
+
+    {:ok, Repo.all(query)}
+  end
+
+  @spec retrieve_by_customer_id(customer_id :: id()) :: {:ok, customer()}
+  def retrieve_by_customer_id(customer_id) do
+    query =
+      from(account in Account,
+        join: customer in Customer,
+        on: account.customer_id == customer.id,
+        where: customer.id == ^customer_id
       )
 
     {:ok, Repo.all(query)}

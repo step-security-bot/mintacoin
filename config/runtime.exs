@@ -69,9 +69,13 @@ if config_env() == :prod do
   # Encryption variables for accounts signatures
   config :mintacoin, encryption_variable: System.fetch_env!("ENCRYPTION_VARIABLE")
 
-  # Temporal API Authentication
-  config :mintacoin, api_token: System.fetch_env!("API_TOKEN")
-
   # For Accounts creation
   config :mintacoin, starting_balance: System.fetch_env!("STARTING_BALANCE")
+
+  # Home redirect url
+  config :mintacoin, home_redirect_url: System.fetch_env!("HOME_REDIRECT_URL")
+
+  # Secret to generate authentication token
+  config :mintacoin, secret_key_base: System.fetch_env!("SECRET_KEY_BASE")
+  config :mintacoin, signing_salt: System.fetch_env!("SIGNING_SALT")
 end

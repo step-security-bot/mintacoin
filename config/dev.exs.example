@@ -34,11 +34,15 @@ config :mintacoin, encryption_variable: "HQHSCWQ4HNBMLFUWHU2S7H3KGU"
 # Configure blockchains network :testnet | :mainnet
 config :mintacoin, blockchains_network: "BLOCKCHAINS_NETWORK"
 
-# Temporal API Authentication
-config :mintacoin, api_token: "API_TOKEN"
-
 # For Accounts creation
 config :mintacoin, starting_balance: System.get_env("STARTING_BALANCE", "10.0")
+
+# Secret to generate authentication token
+config :mintacoin, secret_key_base: "SECRET_KEY_BASE"
+config :mintacoin, signing_salt: "SIGNING_SALT"
+
+# Home redirect url
+config :mintacoin, home_redirect_url: "https://docs.mintacoin.co/"
 
 # Stellar SDK configuration
 config :stellar_sdk, network: :test

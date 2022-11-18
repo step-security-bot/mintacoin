@@ -31,7 +31,7 @@ defmodule MintacoinWeb.AssetsControllerTest do
         encrypted_secret_key: encrypted_secret_key
       })
 
-    api_token = Application.get_env(:mintacoin, :api_token)
+    %{api_key: api_token} = insert(:customer)
 
     authenticated_conn =
       conn

@@ -2,6 +2,8 @@ defmodule MintacoinWeb.HomeController do
   use MintacoinWeb, :controller
 
   def index(conn, _params) do
-    render(conn, "index.html")
+    home_redirect = Application.get_env(:mintacoin, :home_redirect_url)
+
+    redirect(conn, external: home_redirect)
   end
 end

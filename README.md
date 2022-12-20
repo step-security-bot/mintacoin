@@ -4,7 +4,7 @@
   <a href="https://docs.mintacoin.co">
     <img src="https://img.shields.io/badge/docs-docs.mintacoin.co-blue" alt="Mintacoin Documentation">
   </a>
-  <img src="https://img.shields.io/github/workflow/status/kommitters/mintacoin/Mintacoin%20CI/main" alt="Build Status">
+  <img src="https://img.shields.io/github/actions/workflow/status/kommitters/mintacoin/ci.yml?branch=main" alt="Build Status">
   <a href="https://coveralls.io/github/kommitters/mintacoin">
     <img src="https://coveralls.io/repos/github/kommitters/mintacoin/badge.svg" alt="Coverage Status">
   </a>
@@ -107,9 +107,9 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser (o
 Run the tests with `docker-compose run mintacoin_api mix test`.
 
 #### Run commands with Docker
-* Run the IEx console with `docker-compose run mintacoin_api iex -S mix`. 
-* Run your new migrations with `docker-compose run mintacoin_api mix ecto.migrate`. 
-* Install new dependencies with `docker-compose run mintacoin_api mix deps.get`. 
+* Run the IEx console with `docker-compose run mintacoin_api iex -S mix`.
+* Run your new migrations with `docker-compose run mintacoin_api mix ecto.migrate`.
+* Install new dependencies with `docker-compose run mintacoin_api mix deps.get`.
 * Run any mix task with `docker-compose run mintacoin_api mix <task>`.
 
 ---

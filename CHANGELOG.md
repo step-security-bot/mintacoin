@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.2 (21.12.2022)
+* Fix build badge.
+
 ## 0.5.1 (18.11.2022)
 * Update env variable access function from `Application.compile_env!/3` to `Application.get_env/3` in accounts stellar implementation to fix deployment.
 
